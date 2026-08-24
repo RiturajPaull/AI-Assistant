@@ -1,0 +1,33 @@
+import { contextBridge, ipcRenderer } from 'electron'
+import { electronAPI } from '@electron-toolkit/preload'
+
+// Custom APIs for renderer
+const api = {}
+
+const evApi = {
+  getStatus: () => ipcRenderer.invoke('ev:status')
+}
+
+const systemApi = {
+  getSystemStats: () => ipcRenderer.invoke('ev:system:stats')
+}
+
+// Use `contextBridge` APIs to expose Electron APIs to
+// renderer only if context isolation is enabled, otherwise
+// just add to the DOM global.
+if (process.contextIsolated) {
+  try {
+    contextBridge.exposeInMainWorld('electron', electronAPI)
+    contextBridge.exposeInMainWorld('api', api)
+    contextBridge.exposeInMainWorld('ev', evApi)
+    contextBridge.exposeInMainWorld('system', systemApi)
+  } catch (error) {
+    console.error(error)
+  }
+} else {
+  window.electron = electronAPI
+  window.api = api
+  window.ev = evApi
+  window.system = systemApi
+}
+
