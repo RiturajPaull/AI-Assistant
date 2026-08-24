@@ -12,6 +12,12 @@ const systemApi = {
   getSystemStats: () => ipcRenderer.invoke('ev:system:stats')
 }
 
+const windowControlsApi = {
+  minimize: () => ipcRenderer.send('window:minimize'),
+  maximize: () => ipcRenderer.send('window:maximize'),
+  close: () => ipcRenderer.send('window:close')
+}
+
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise
 // just add to the DOM global.
@@ -21,6 +27,7 @@ if (process.contextIsolated) {
     contextBridge.exposeInMainWorld('api', api)
     contextBridge.exposeInMainWorld('ev', evApi)
     contextBridge.exposeInMainWorld('system', systemApi)
+    contextBridge.exposeInMainWorld('windowControls', windowControlsApi)
   } catch (error) {
     console.error(error)
   }
@@ -29,5 +36,7 @@ if (process.contextIsolated) {
   window.api = api
   window.ev = evApi
   window.system = systemApi
+  window.windowControls = windowControlsApi
 }
+
 
