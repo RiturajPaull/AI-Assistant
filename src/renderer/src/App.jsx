@@ -4,11 +4,15 @@ import {
   HardDrive,
   Battery,
   BatteryCharging,
-  Wifi,
-  Activity,
+  Zap,
   Layers,
   RefreshCw,
-  Server
+  Minus,
+  Square,
+  X,
+  Radio,
+  Flame,
+  Activity
 } from "lucide-react";
 
 function App() {
@@ -30,11 +34,11 @@ function App() {
         setStats(systemStats);
         setError(null);
       } else {
-        setError("window.system is not available. Please restart the Electron app.");
+        setError("EV telemetry link offline. Please restart EV.");
       }
     } catch (err) {
       console.error("Failed to fetch system stats:", err);
-      setError(err.message || "Failed to fetch system metrics");
+      setError(err.message || "EV neural link interrupted");
     } finally {
       setLoading(false);
     }
@@ -47,7 +51,7 @@ function App() {
     const poll = async () => {
       await fetchSystemData();
       if (isMounted && isAutoRefresh) {
-        timerId = setTimeout(poll, 2500);
+        timerId = setTimeout(poll, 3000);
       }
     };
 
@@ -59,298 +63,635 @@ function App() {
     };
   }, [isAutoRefresh]);
 
+  const handleMinimize = () => window.windowControls?.minimize();
+  const handleMaximize = () => window.windowControls?.maximize();
+  const handleClose = () => window.windowControls?.close();
+
   return (
     <div
       style={{
         width: "100%",
-        maxWidth: "960px",
-        margin: "0 auto",
-        padding: "32px 20px 60px 20px",
-        color: "#f3f4f6",
-        fontFamily: "Inter, sans-serif"
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        background: "transparent",
+        padding: "12px",
+        boxSizing: "border-box"
       }}
     >
-      {/* Header */}
+      {/* EV HUD Main Container */}
       <div
+        className="hud-panel"
         style={{
+          width: "100%",
+          height: "100%",
           display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "20px",
-          paddingBottom: "12px",
-          borderBottom: "1px solid rgba(255, 255, 255, 0.1)"
+          flexDirection: "column",
+          borderRadius: "16px",
+          border: "1px solid rgba(255, 136, 0, 0.45)",
+          background: "linear-gradient(135deg, rgba(28, 12, 3, 0.85) 0%, rgba(16, 6, 2, 0.78) 100%)",
+          boxShadow: "0 0 35px rgba(255, 119, 0, 0.22), inset 0 0 25px rgba(255, 119, 0, 0.08)",
+          position: "relative"
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-          <h1 style={{ fontSize: "26px", fontWeight: "800", letterSpacing: "-0.5px", margin: 0 }}>
-            EV System Monitor
-          </h1>
-          {status && (
-            <span
+        {/* Corner Hologram Accents */}
+        <div className="hud-corner hud-corner-tl" style={{ width: "16px", height: "16px", borderWidth: "3px 0 0 3px", borderColor: "#ff7700" }} />
+        <div className="hud-corner hud-corner-tr" style={{ width: "16px", height: "16px", borderWidth: "3px 3px 0 0", borderColor: "#ff7700" }} />
+        <div className="hud-corner hud-corner-bl" style={{ width: "16px", height: "16px", borderWidth: "0 0 3px 3px", borderColor: "#ff7700" }} />
+        <div className="hud-corner hud-corner-br" style={{ width: "16px", height: "16px", borderWidth: "0 3px 3px 0", borderColor: "#ff7700" }} />
+
+        {/* Top Draggable HUD Window Bar */}
+        <div
+          className="titlebar-drag"
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: "12px 18px",
+            borderBottom: "1px solid rgba(255, 136, 0, 0.25)",
+            background: "rgba(255, 119, 0, 0.05)"
+          }}
+        >
+          {/* EV Brand Logo & System State */}
+          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            {/* Pulsing Orange Arc Reactor Icon */}
+            <div
               style={{
-                fontSize: "12px",
-                padding: "3px 10px",
-                borderRadius: "9999px",
-                backgroundColor: status.status === "online" ? "rgba(34, 197, 94, 0.2)" : "rgba(234, 179, 8, 0.2)",
-                color: status.status === "online" ? "#4ade80" : "#facc15",
-                border: "1px solid currentColor",
-                fontWeight: "600"
+                width: "30px",
+                height: "30px",
+                borderRadius: "50%",
+                border: "2px solid #ff7700",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                boxShadow: "0 0 14px #ff7700, inset 0 0 8px #ff7700",
+                animation: "arcPulseOrange 4s infinite linear"
               }}
             >
-              {status.status.toUpperCase()}
+              <div
+                style={{
+                  width: "12px",
+                  height: "12px",
+                  borderRadius: "50%",
+                  backgroundColor: "#ff9900",
+                  boxShadow: "0 0 10px #ffa600"
+                }}
+              />
+            </div>
+
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <span
+                  className="hud-text-glow"
+                  style={{
+                    fontSize: "17px",
+                    fontWeight: "900",
+                    letterSpacing: "3px",
+                    color: "#ff8c00"
+                  }}
+                >
+                  E.V
+                </span>
+                <span
+                  style={{
+                    fontSize: "10px",
+                    letterSpacing: "1.5px",
+                    padding: "2px 7px",
+                    borderRadius: "4px",
+                    background: "rgba(255, 119, 0, 0.2)",
+                    border: "1px solid rgba(255, 140, 0, 0.5)",
+                    color: "#ffa600",
+                    fontWeight: "800"
+                  }}
+                >
+                  AI NEURAL OS
+                </span>
+              </div>
+              <p
+                style={{
+                  fontSize: "10px",
+                  letterSpacing: "1.5px",
+                  color: "rgba(255, 170, 80, 0.75)",
+                  margin: 0,
+                  textTransform: "uppercase"
+                }}
+              >
+                TACTICAL HUD TELEMETRY // CORE STATUS {status?.status === "online" ? "ONLINE" : "STANDBY"}
+              </p>
+            </div>
+          </div>
+
+          {/* Central Subsystem Live Badge */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              padding: "4px 14px",
+              borderRadius: "20px",
+              background: "rgba(255, 119, 0, 0.1)",
+              border: "1px solid rgba(255, 140, 0, 0.35)",
+              boxShadow: "0 0 10px rgba(255, 119, 0, 0.15)"
+            }}
+          >
+            <span
+              style={{
+                width: "8px",
+                height: "8px",
+                borderRadius: "50%",
+                backgroundColor: "#22c55e",
+                boxShadow: "0 0 8px #22c55e"
+              }}
+            />
+            <span style={{ fontSize: "11px", letterSpacing: "1.5px", color: "#fed7aa", fontWeight: "700" }}>
+              ALL SYSTEMS NOMINAL
             </span>
+          </div>
+
+          {/* Controls & Window Action Buttons */}
+          <div className="no-drag" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <button
+              onClick={() => setIsAutoRefresh(!isAutoRefresh)}
+              style={{
+                padding: "4px 10px",
+                borderRadius: "6px",
+                background: isAutoRefresh ? "rgba(255, 119, 0, 0.25)" : "rgba(255, 255, 255, 0.05)",
+                color: isAutoRefresh ? "#ff9900" : "#94a3b8",
+                border: isAutoRefresh ? "1px solid #ff7700" : "1px solid rgba(255, 255, 255, 0.1)",
+                cursor: "pointer",
+                fontSize: "11px",
+                fontWeight: "700",
+                letterSpacing: "1px",
+                display: "flex",
+                alignItems: "center",
+                gap: "5px"
+              }}
+            >
+              <Radio size={12} color={isAutoRefresh ? "#ff9900" : "#94a3b8"} />
+              {isAutoRefresh ? "SYNC 3s" : "PAUSED"}
+            </button>
+
+            <button
+              onClick={fetchSystemData}
+              title="Manual Telemetry Scan"
+              style={{
+                padding: "6px",
+                borderRadius: "6px",
+                background: "rgba(255, 119, 0, 0.12)",
+                border: "1px solid rgba(255, 140, 0, 0.35)",
+                color: "#ff9900",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center"
+              }}
+            >
+              <RefreshCw size={13} />
+            </button>
+
+            <div style={{ width: "1px", height: "16px", background: "rgba(255, 136, 0, 0.3)", margin: "0 4px" }} />
+
+            {/* Minimize Button */}
+            <button
+              onClick={handleMinimize}
+              title="Minimize"
+              style={{
+                width: "28px",
+                height: "28px",
+                borderRadius: "6px",
+                background: "transparent",
+                border: "1px solid rgba(255, 255, 255, 0.12)",
+                color: "#fdba74",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center"
+              }}
+            >
+              <Minus size={13} />
+            </button>
+
+            {/* Maximize Button */}
+            <button
+              onClick={handleMaximize}
+              title="Maximize"
+              style={{
+                width: "28px",
+                height: "28px",
+                borderRadius: "6px",
+                background: "transparent",
+                border: "1px solid rgba(255, 255, 255, 0.12)",
+                color: "#fdba74",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center"
+              }}
+            >
+              <Square size={11} />
+            </button>
+
+            {/* Close Button */}
+            <button
+              onClick={handleClose}
+              title="Close HUD"
+              style={{
+                width: "28px",
+                height: "28px",
+                borderRadius: "6px",
+                background: "rgba(255, 51, 68, 0.18)",
+                border: "1px solid rgba(255, 51, 68, 0.45)",
+                color: "#ff3344",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center"
+              }}
+            >
+              <X size={13} />
+            </button>
+          </div>
+        </div>
+
+        {/* Scrollable Telemetry Viewport */}
+        <div
+          style={{
+            flex: 1,
+            overflowY: "auto",
+            padding: "20px 24px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "18px"
+          }}
+        >
+          {/* Error Banner */}
+          {error && (
+            <div
+              style={{
+                background: "rgba(255, 51, 68, 0.18)",
+                border: "1px solid #ff3344",
+                borderRadius: "8px",
+                padding: "10px 16px",
+                color: "#fca5a5",
+                fontSize: "13px",
+                display: "flex",
+                alignItems: "center",
+                gap: "8px"
+              }}
+            >
+              <Zap size={16} color="#ff3344" />
+              <span>{error}</span>
+            </div>
+          )}
+
+          {/* Hologram Telemetry Grid */}
+          {stats ? (
+            <>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+                  gap: "16px"
+                }}
+              >
+                {/* CPU Core Card */}
+                <div
+                  className="hud-panel"
+                  style={{
+                    padding: "18px",
+                    background: "rgba(32, 14, 4, 0.65)",
+                    border: "1px solid rgba(255, 136, 0, 0.4)",
+                    boxShadow: "0 0 20px rgba(255, 119, 0, 0.12)"
+                  }}
+                >
+                  <div className="hud-corner hud-corner-tl" style={{ borderColor: "#ff7700" }} />
+                  <div className="hud-corner hud-corner-br" style={{ borderColor: "#ff7700" }} />
+
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <Cpu size={18} color="#ff8c00" />
+                      <span style={{ fontSize: "13px", fontWeight: "800", letterSpacing: "1.5px", color: "#ffa600" }}>
+                        CPU NEURAL MATRIX
+                      </span>
+                    </div>
+                    <span
+                      className="hud-text-glow"
+                      style={{
+                        fontSize: "22px",
+                        fontWeight: "900",
+                        color: stats.cpu?.usage > 80 ? "#ff3344" : "#ff8c00"
+                      }}
+                    >
+                      {stats.cpu?.usage}%
+                    </span>
+                  </div>
+
+                  {/* Holographic Glowing Gauge */}
+                  <div
+                    style={{
+                      width: "100%",
+                      height: "6px",
+                      background: "rgba(255, 119, 0, 0.15)",
+                      borderRadius: "3px",
+                      overflow: "hidden",
+                      marginBottom: "14px",
+                      boxShadow: "inset 0 0 6px rgba(255, 119, 0, 0.25)"
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: `${Math.min(stats.cpu?.usage || 0, 100)}%`,
+                        height: "100%",
+                        background: stats.cpu?.usage > 80
+                          ? "linear-gradient(90deg, #ff3344, #ff6b7d)"
+                          : "linear-gradient(90deg, #ff5500, #ffa600)",
+                        boxShadow: "0 0 10px #ff7700",
+                        transition: "width 0.4s ease"
+                      }}
+                    />
+                  </div>
+
+                  <div style={{ fontSize: "12px", color: "#fed7aa", lineHeight: "1.7" }}>
+                    <p style={{ margin: 0 }}>
+                      <strong style={{ color: "#fb923c" }}>PROCESSOR:</strong> {stats.cpu?.brand || stats.cpu?.manufacturer || "ARCH-64"}
+                    </p>
+                    <p style={{ margin: 0 }}>
+                      <strong style={{ color: "#fb923c" }}>CORES:</strong> {stats.cpu?.cores} Logical ({stats.cpu?.physicalCores} Physical) • {stats.cpu?.speed} GHz
+                    </p>
+                  </div>
+                </div>
+
+                {/* RAM Matrix Card */}
+                <div
+                  className="hud-panel"
+                  style={{
+                    padding: "18px",
+                    background: "rgba(32, 14, 4, 0.65)",
+                    border: "1px solid rgba(255, 136, 0, 0.4)",
+                    boxShadow: "0 0 20px rgba(255, 119, 0, 0.12)"
+                  }}
+                >
+                  <div className="hud-corner hud-corner-tl" style={{ borderColor: "#ff7700" }} />
+                  <div className="hud-corner hud-corner-br" style={{ borderColor: "#ff7700" }} />
+
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <HardDrive size={18} color="#f59e0b" />
+                      <span style={{ fontSize: "13px", fontWeight: "800", letterSpacing: "1.5px", color: "#f59e0b" }}>
+                        MEMORY ALLOCATION
+                      </span>
+                    </div>
+                    <span
+                      className="hud-text-glow"
+                      style={{
+                        fontSize: "22px",
+                        fontWeight: "900",
+                        color: stats.memory?.usage > 85 ? "#ff3344" : "#f59e0b"
+                      }}
+                    >
+                      {stats.memory?.usage}%
+                    </span>
+                  </div>
+
+                  {/* Gauge */}
+                  <div
+                    style={{
+                      width: "100%",
+                      height: "6px",
+                      background: "rgba(245, 158, 11, 0.15)",
+                      borderRadius: "3px",
+                      overflow: "hidden",
+                      marginBottom: "14px",
+                      boxShadow: "inset 0 0 6px rgba(245, 158, 11, 0.25)"
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: `${Math.min(stats.memory?.usage || 0, 100)}%`,
+                        height: "100%",
+                        background: stats.memory?.usage > 85
+                          ? "linear-gradient(90deg, #ff3344, #ff6b7d)"
+                          : "linear-gradient(90deg, #f59e0b, #fbbf24)",
+                        boxShadow: "0 0 10px #f59e0b",
+                        transition: "width 0.4s ease"
+                      }}
+                    />
+                  </div>
+
+                  <div style={{ fontSize: "12px", color: "#fed7aa", lineHeight: "1.7" }}>
+                    <p style={{ margin: 0 }}>
+                      <strong style={{ color: "#fb923c" }}>CONSUMED:</strong> {stats.memory?.usedGB} GB / {stats.memory?.totalGB} GB
+                    </p>
+                    <p style={{ margin: 0 }}>
+                      <strong style={{ color: "#fb923c" }}>AVAILABLE:</strong> {stats.memory?.freeGB} GB
+                    </p>
+                  </div>
+                </div>
+
+                {/* Arc Power / GPU Card */}
+                <div
+                  className="hud-panel"
+                  style={{
+                    padding: "18px",
+                    background: "rgba(32, 14, 4, 0.65)",
+                    border: "1px solid rgba(255, 136, 0, 0.4)",
+                    boxShadow: "0 0 20px rgba(255, 119, 0, 0.12)"
+                  }}
+                >
+                  <div className="hud-corner hud-corner-tl" style={{ borderColor: "#ff7700" }} />
+                  <div className="hud-corner hud-corner-br" style={{ borderColor: "#ff7700" }} />
+
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      {stats.battery?.charging ? <BatteryCharging size={18} color="#22c55e" /> : <Battery size={18} color="#22c55e" />}
+                      <span style={{ fontSize: "13px", fontWeight: "800", letterSpacing: "1.5px", color: "#22c55e" }}>
+                        ARC POWER & GPU
+                      </span>
+                    </div>
+                    <span
+                      style={{
+                        fontSize: "20px",
+                        fontWeight: "900",
+                        color: "#22c55e",
+                        textShadow: "0 0 10px rgba(34, 197, 94, 0.6)"
+                      }}
+                    >
+                      {stats.battery?.hasBattery ? `${stats.battery.percent}%` : "AC ACTIVE"}
+                    </span>
+                  </div>
+
+                  {/* Battery Bar */}
+                  {stats.battery?.hasBattery && (
+                    <div
+                      style={{
+                        width: "100%",
+                        height: "6px",
+                        background: "rgba(34, 197, 94, 0.15)",
+                        borderRadius: "3px",
+                        overflow: "hidden",
+                        marginBottom: "14px"
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: `${stats.battery.percent}%`,
+                          height: "100%",
+                          background: stats.battery.percent < 20
+                            ? "#ff3344"
+                            : "linear-gradient(90deg, #22c55e, #86efac)",
+                          boxShadow: "0 0 10px #22c55e",
+                          transition: "width 0.4s ease"
+                        }}
+                      />
+                    </div>
+                  )}
+
+                  <div style={{ fontSize: "12px", color: "#fed7aa", lineHeight: "1.7" }}>
+                    <p style={{ margin: 0 }}>
+                      <strong style={{ color: "#fb923c" }}>STATE:</strong>{" "}
+                      {stats.battery?.hasBattery
+                        ? (stats.battery.charging ? "⚡ ARC INJECTION (CHARGING)" : "🔋 DISCHARGING")
+                        : "DIRECT GRID POWER FEED"}
+                    </p>
+                    {stats.gpu?.controllers?.length > 0 && (
+                      <p style={{ margin: 0 }}>
+                        <strong style={{ color: "#fb923c" }}>GPU:</strong> {stats.gpu.controllers[0].model || "Radeon Core"}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Tactical Process Stream Table */}
+              {stats.processes?.list && (
+                <div
+                  className="hud-panel"
+                  style={{
+                    padding: "18px",
+                    background: "rgba(32, 14, 4, 0.65)",
+                    border: "1px solid rgba(255, 136, 0, 0.4)",
+                    boxShadow: "0 0 20px rgba(255, 119, 0, 0.12)"
+                  }}
+                >
+                  <div className="hud-corner hud-corner-tl" style={{ borderColor: "#ff7700" }} />
+                  <div className="hud-corner hud-corner-tr" style={{ borderColor: "#ff7700" }} />
+                  <div className="hud-corner hud-corner-bl" style={{ borderColor: "#ff7700" }} />
+                  <div className="hud-corner hud-corner-br" style={{ borderColor: "#ff7700" }} />
+
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      marginBottom: "14px",
+                      borderBottom: "1px solid rgba(255, 136, 0, 0.25)",
+                      paddingBottom: "8px"
+                    }}
+                  >
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <Layers size={17} color="#fbbf24" />
+                      <span
+                        className="hud-gold-glow"
+                        style={{ fontSize: "13px", fontWeight: "800", letterSpacing: "1.5px", color: "#fbbf24" }}
+                      >
+                        TACTICAL PROCESS THREADS
+                      </span>
+                    </div>
+                    <span style={{ fontSize: "11px", color: "rgba(255, 170, 80, 0.8)", letterSpacing: "1px" }}>
+                      ACTIVE THREADS: {stats.processes.total} // RUNNING: {stats.processes.running}
+                    </span>
+                  </div>
+
+                  <div style={{ overflowX: "auto" }}>
+                    <table
+                      style={{
+                        width: "100%",
+                        textAlign: "left",
+                        fontSize: "12px",
+                        borderCollapse: "collapse",
+                        letterSpacing: "0.5px"
+                      }}
+                    >
+                      <thead>
+                        <tr style={{ color: "rgba(255, 170, 80, 0.75)", borderBottom: "1px solid rgba(255, 136, 0, 0.2)" }}>
+                          <th style={{ padding: "8px 6px" }}>PID</th>
+                          <th style={{ padding: "8px 6px" }}>MODULE NAME</th>
+                          <th style={{ padding: "8px 6px" }}>CPU ALLOCATION</th>
+                          <th style={{ padding: "8px 6px" }}>RAM FOOTPRINT</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {stats.processes.list.slice(0, 6).map((proc) => (
+                          <tr
+                            key={proc.pid}
+                            style={{
+                              borderBottom: "1px solid rgba(255, 136, 0, 0.08)",
+                              transition: "background 0.2s ease"
+                            }}
+                          >
+                            <td style={{ padding: "8px 6px", color: "#fb923c", fontFamily: "Consolas, monospace" }}>
+                              #{proc.pid}
+                            </td>
+                            <td style={{ padding: "8px 6px", fontWeight: "600", color: "#ffedd5" }}>
+                              {proc.name}
+                            </td>
+                            <td style={{ padding: "8px 6px" }}>
+                              <span
+                                style={{
+                                  color: proc.cpu > 20 ? "#ff3344" : "#ff9900",
+                                  fontWeight: "700"
+                                }}
+                              >
+                                {proc.cpu?.toFixed(1)}%
+                              </span>
+                            </td>
+                            <td style={{ padding: "8px 6px", color: "#fed7aa" }}>
+                              {proc.memory?.toFixed(1)}%
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+            </>
+          ) : (
+            <div style={{ textAlign: "center", padding: "60px 0", color: "#ff8c00" }}>
+              <div
+                style={{
+                  width: "48px",
+                  height: "48px",
+                  margin: "0 auto 16px auto",
+                  borderRadius: "50%",
+                  border: "2px dashed #ff7700",
+                  animation: "arcPulseOrange 2s infinite linear"
+                }}
+              />
+              <p style={{ letterSpacing: "2px", fontSize: "14px", fontWeight: "700" }}>
+                INITIALIZING E.V NEURAL CORE...
+              </p>
+            </div>
           )}
         </div>
 
-        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <button
-            onClick={() => setIsAutoRefresh(!isAutoRefresh)}
-            style={{
-              padding: "6px 12px",
-              borderRadius: "8px",
-              background: isAutoRefresh ? "#2563eb" : "#374151",
-              color: "#ffffff",
-              border: "none",
-              cursor: "pointer",
-              fontSize: "12px",
-              fontWeight: "600"
-            }}
-          >
-            {isAutoRefresh ? "● Live (2s)" : "Paused"}
-          </button>
-          <button
-            onClick={fetchSystemData}
-            title="Refresh now"
-            style={{
-              padding: "6px 10px",
-              borderRadius: "8px",
-              background: "rgba(255, 255, 255, 0.1)",
-              color: "#ffffff",
-              border: "1px solid rgba(255, 255, 255, 0.15)",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center"
-            }}
-          >
-            <RefreshCw size={14} />
-          </button>
+        {/* HUD Bottom Status Ticker */}
+        <div
+          style={{
+            padding: "8px 18px",
+            borderTop: "1px solid rgba(255, 136, 0, 0.2)",
+            background: "rgba(255, 119, 0, 0.03)",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            fontSize: "10px",
+            letterSpacing: "1px",
+            color: "rgba(255, 170, 80, 0.7)"
+          }}
+        >
+          <span>E.V TACTICAL INTELLIGENCE // READY</span>
+          <span>LATENCY: &lt;1ms // NEURAL LINK STABLE</span>
         </div>
       </div>
-
-      {/* Error Alert */}
-      {error && (
-        <div
-          style={{
-            backgroundColor: "rgba(239, 68, 68, 0.15)",
-            border: "1px solid #ef4444",
-            color: "#fca5a5",
-            padding: "12px 16px",
-            borderRadius: "10px",
-            marginBottom: "18px",
-            fontSize: "14px"
-          }}
-        >
-          ⚠️ {error}
-        </div>
-      )}
-
-      {/* Loading state */}
-      {loading && !stats && (
-        <div style={{ textAlign: "center", padding: "40px 0", color: "#9ca3af" }}>
-          <Activity size={28} style={{ animation: "spin 1s linear infinite", marginBottom: "8px" }} />
-          <p>Fetching system telemetry...</p>
-        </div>
-      )}
-
-      {/* Grid of System Cards */}
-      {stats && (
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-            gap: "16px",
-            marginBottom: "20px"
-          }}
-        >
-          {/* CPU Card */}
-          <div
-            style={{
-              backgroundColor: "rgba(30, 41, 59, 0.7)",
-              backdropFilter: "blur(12px)",
-              border: "1px solid rgba(255, 255, 255, 0.08)",
-              borderRadius: "12px",
-              padding: "16px"
-            }}
-          >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <Cpu size={18} color="#60a5fa" />
-                <span style={{ fontWeight: "700", fontSize: "15px" }}>Processor</span>
-              </div>
-              <span style={{ fontSize: "18px", fontWeight: "800", color: stats.cpu?.usage > 80 ? "#f87171" : "#60a5fa" }}>
-                {stats.cpu?.usage}%
-              </span>
-            </div>
-
-            {/* Usage Bar */}
-            <div style={{ width: "100%", height: "6px", backgroundColor: "rgba(255,255,255,0.1)", borderRadius: "4px", overflow: "hidden", marginBottom: "12px" }}>
-              <div
-                style={{
-                  width: `${Math.min(stats.cpu?.usage || 0, 100)}%`,
-                  height: "100%",
-                  backgroundColor: stats.cpu?.usage > 80 ? "#ef4444" : "#3b82f6",
-                  transition: "width 0.3s ease"
-                }}
-              />
-            </div>
-
-            <p style={{ fontSize: "13px", color: "#94a3b8", margin: "4px 0" }}>
-              <strong>Model:</strong> {stats.cpu?.brand || stats.cpu?.manufacturer || "N/A"}
-            </p>
-            <p style={{ fontSize: "13px", color: "#94a3b8", margin: "4px 0" }}>
-              <strong>Cores:</strong> {stats.cpu?.cores} ({stats.cpu?.physicalCores} Physical) • {stats.cpu?.speed} GHz
-            </p>
-          </div>
-
-          {/* Memory Card */}
-          <div
-            style={{
-              backgroundColor: "rgba(30, 41, 59, 0.7)",
-              backdropFilter: "blur(12px)",
-              border: "1px solid rgba(255, 255, 255, 0.08)",
-              borderRadius: "12px",
-              padding: "16px"
-            }}
-          >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <HardDrive size={18} color="#a78bfa" />
-                <span style={{ fontWeight: "700", fontSize: "15px" }}>RAM Memory</span>
-              </div>
-              <span style={{ fontSize: "18px", fontWeight: "800", color: stats.memory?.usage > 85 ? "#f87171" : "#a78bfa" }}>
-                {stats.memory?.usage}%
-              </span>
-            </div>
-
-            {/* Usage Bar */}
-            <div style={{ width: "100%", height: "6px", backgroundColor: "rgba(255,255,255,0.1)", borderRadius: "4px", overflow: "hidden", marginBottom: "12px" }}>
-              <div
-                style={{
-                  width: `${Math.min(stats.memory?.usage || 0, 100)}%`,
-                  height: "100%",
-                  backgroundColor: stats.memory?.usage > 85 ? "#ef4444" : "#8b5cf6",
-                  transition: "width 0.3s ease"
-                }}
-              />
-            </div>
-
-            <p style={{ fontSize: "13px", color: "#94a3b8", margin: "4px 0" }}>
-              <strong>Used:</strong> {stats.memory?.usedGB} GB / {stats.memory?.totalGB} GB
-            </p>
-            <p style={{ fontSize: "13px", color: "#94a3b8", margin: "4px 0" }}>
-              <strong>Available:</strong> {stats.memory?.freeGB} GB
-            </p>
-          </div>
-
-          {/* Battery / GPU Card */}
-          <div
-            style={{
-              backgroundColor: "rgba(30, 41, 59, 0.7)",
-              backdropFilter: "blur(12px)",
-              border: "1px solid rgba(255, 255, 255, 0.08)",
-              borderRadius: "12px",
-              padding: "16px"
-            }}
-          >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                {stats.battery?.charging ? <BatteryCharging size={18} color="#34d399" /> : <Battery size={18} color="#34d399" />}
-                <span style={{ fontWeight: "700", fontSize: "15px" }}>Battery & Power</span>
-              </div>
-              <span style={{ fontSize: "18px", fontWeight: "800", color: "#34d399" }}>
-                {stats.battery?.hasBattery ? `${stats.battery.percent}%` : "AC Power"}
-              </span>
-            </div>
-
-            {stats.battery?.hasBattery ? (
-              <>
-                <div style={{ width: "100%", height: "6px", backgroundColor: "rgba(255,255,255,0.1)", borderRadius: "4px", overflow: "hidden", marginBottom: "12px" }}>
-                  <div
-                    style={{
-                      width: `${stats.battery.percent}%`,
-                      height: "100%",
-                      backgroundColor: stats.battery.percent < 20 ? "#ef4444" : "#10b981",
-                      transition: "width 0.3s ease"
-                    }}
-                  />
-                </div>
-                <p style={{ fontSize: "13px", color: "#94a3b8", margin: "4px 0" }}>
-                  <strong>State:</strong> {stats.battery?.charging ? "⚡ Charging" : "🔋 Discharging"}
-                </p>
-              </>
-            ) : (
-              <p style={{ fontSize: "13px", color: "#94a3b8", margin: "4px 0" }}>
-                Desktop / No Battery Detected
-              </p>
-            )}
-
-            {stats.gpu?.controllers?.length > 0 && (
-              <p style={{ fontSize: "13px", color: "#94a3b8", margin: "4px 0" }}>
-                <strong>GPU:</strong> {stats.gpu.controllers[0].model || "Integrated"}
-              </p>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* Processes Section */}
-      {stats?.processes?.list && (
-        <div
-          style={{
-            backgroundColor: "rgba(30, 41, 59, 0.7)",
-            backdropFilter: "blur(12px)",
-            border: "1px solid rgba(255, 255, 255, 0.08)",
-            borderRadius: "12px",
-            padding: "16px"
-          }}
-        >
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <Layers size={18} color="#f59e0b" />
-              <span style={{ fontWeight: "700", fontSize: "15px" }}>Top Active Processes</span>
-            </div>
-            <span style={{ fontSize: "12px", color: "#94a3b8" }}>
-              Total: {stats.processes.total} ({stats.processes.running} Running)
-            </span>
-          </div>
-
-          <div style={{ overflowX: "auto" }}>
-            <table style={{ width: "100%", textAlign: "left", fontSize: "13px", borderCollapse: "collapse" }}>
-              <thead>
-                <tr style={{ color: "#94a3b8", borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
-                  <th style={{ padding: "8px 4px" }}>PID</th>
-                  <th style={{ padding: "8px 4px" }}>Name</th>
-                  <th style={{ padding: "8px 4px" }}>CPU %</th>
-                  <th style={{ padding: "8px 4px" }}>Memory %</th>
-                </tr>
-              </thead>
-              <tbody>
-                {stats.processes.list.slice(0, 8).map((proc) => (
-                  <tr key={proc.pid} style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-                    <td style={{ padding: "8px 4px", color: "#64748b" }}>{proc.pid}</td>
-                    <td style={{ padding: "8px 4px", fontWeight: "500" }}>{proc.name}</td>
-                    <td style={{ padding: "8px 4px", color: proc.cpu > 20 ? "#f87171" : "#e2e8f0" }}>
-                      {proc.cpu?.toFixed(1)}%
-                    </td>
-                    <td style={{ padding: "8px 4px", color: "#94a3b8" }}>{proc.memory?.toFixed(1)}%</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

@@ -1,165 +1,154 @@
 @import './base.css';
 
-body {
-  overflow-y: auto;
-  overflow-x: hidden;
-  background-image: url('./wavy-lines.svg');
-  background-size: cover;
-  background-attachment: fixed;
-  user-select: none;
-  min-height: 100vh;
+:root {
+  --hud-orange: #ff7700;
+  --hud-orange-bright: #ff9900;
+  --hud-orange-dim: rgba(255, 136, 0, 0.45);
+  --hud-orange-glow: rgba(255, 119, 0, 0.3);
+  --hud-amber: #f59e0b;
+  --hud-amber-bright: #fbbf24;
+  --hud-dark-bg: rgba(20, 9, 2, 0.82);
+  --hud-dark-card: rgba(28, 12, 3, 0.75);
+  --hud-red: #ff3344;
+  --hud-green: #22c55e;
+  --hud-border: rgba(255, 136, 0, 0.35);
+  --hud-border-bright: rgba(255, 165, 0, 0.8);
 }
 
-code {
-  font-weight: 600;
-  padding: 3px 5px;
-  border-radius: 2px;
-  background-color: var(--color-background-mute);
-  font-family:
-    ui-monospace,
-    SFMono-Regular,
-    SF Mono,
-    Menlo,
-    Consolas,
-    Liberation Mono,
-    monospace;
-  font-size: 85%;
+html, body {
+  background: transparent !important;
+  background-color: transparent !important;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  user-select: none;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  color: #fff7ed;
 }
 
 #root {
-  width: 100%;
-  min-height: 100vh;
+  width: 100vw;
+  height: 100vh;
   display: flex;
-  justify-content: flex-start;
-  align-items: center;
   flex-direction: column;
-}
-
-
-.logo {
-  margin-bottom: 20px;
-  -webkit-user-drag: none;
-  height: 128px;
-  width: 128px;
-  will-change: filter;
-  transition: filter 300ms;
-}
-
-.logo:hover {
-  filter: drop-shadow(0 0 1.2em #6988e6aa);
-}
-
-.creator {
-  font-size: 14px;
-  line-height: 16px;
-  color: var(--ev-c-text-2);
-  font-weight: 600;
-  margin-bottom: 10px;
-}
-
-.text {
-  font-size: 28px;
-  color: var(--ev-c-text-1);
-  font-weight: 700;
-  line-height: 32px;
-  text-align: center;
-  margin: 0 10px;
-  padding: 16px 0;
-}
-
-.tip {
-  font-size: 16px;
-  line-height: 24px;
-  color: var(--ev-c-text-2);
-  font-weight: 600;
-}
-
-.react {
-  background: -webkit-linear-gradient(315deg, #087ea4 55%, #7c93ee);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-weight: 700;
-}
-
-.actions {
-  display: flex;
-  padding-top: 32px;
-  margin: -6px;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-}
-
-.action {
-  flex-shrink: 0;
-  padding: 6px;
-}
-
-.action a {
-  cursor: pointer;
-  text-decoration: none;
-  display: inline-block;
-  border: 1px solid transparent;
-  text-align: center;
-  font-weight: 600;
-  white-space: nowrap;
-  border-radius: 20px;
-  padding: 0 20px;
-  line-height: 38px;
-  font-size: 14px;
-  border-color: var(--ev-button-alt-border);
-  color: var(--ev-button-alt-text);
-  background-color: var(--ev-button-alt-bg);
-}
-
-.action a:hover {
-  border-color: var(--ev-button-alt-hover-border);
-  color: var(--ev-button-alt-hover-text);
-  background-color: var(--ev-button-alt-hover-bg);
-}
-
-.versions {
-  position: absolute;
-  bottom: 30px;
-  margin: 0 auto;
-  padding: 15px 0;
-  font-family: 'Menlo', 'Lucida Console', monospace;
-  display: inline-flex;
+  background: transparent;
   overflow: hidden;
-  align-items: center;
-  border-radius: 22px;
-  background-color: #202127;
-  backdrop-filter: blur(24px);
 }
 
-.versions li {
-  display: block;
-  float: left;
-  border-right: 1px solid var(--ev-c-gray-1);
-  padding: 0 20px;
-  font-size: 14px;
-  line-height: 14px;
-  opacity: 0.8;
-  &:last-child {
-    border: none;
+/* Custom Orange Hologram Scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(30, 10, 0, 0.4);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--hud-orange-dim);
+  border-radius: 4px;
+  box-shadow: 0 0 8px var(--hud-orange);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--hud-orange-bright);
+}
+
+/* Window Drag Regions */
+.titlebar-drag {
+  -webkit-app-region: drag;
+}
+
+.no-drag {
+  -webkit-app-region: no-drag;
+}
+
+/* Orange Arc Reactor Animation */
+@keyframes arcPulseOrange {
+  0%, 100% {
+    transform: rotate(0deg) scale(1);
+    opacity: 0.85;
+    filter: drop-shadow(0 0 10px #ff7700);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.06);
+    opacity: 1;
+    filter: drop-shadow(0 0 22px #ff9900);
   }
 }
 
-@media (max-width: 720px) {
-  .text {
-    font-size: 20px;
+@keyframes orangePulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 16px rgba(255, 119, 0, 0.2), inset 0 0 14px rgba(255, 119, 0, 0.06);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(255, 140, 0, 0.35), inset 0 0 22px rgba(255, 140, 0, 0.12);
   }
 }
 
-@media (max-width: 620px) {
-  .versions {
-    display: none;
-  }
+.hud-panel {
+  background: var(--hud-dark-card);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--hud-border);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), inset 0 0 18px rgba(255, 119, 0, 0.06);
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@media (max-width: 350px) {
-  .tip,
-  .actions {
-    display: none;
-  }
+.hud-panel:hover {
+  border-color: var(--hud-border-bright);
+  box-shadow: 0 10px 40px 0 rgba(255, 119, 0, 0.25), inset 0 0 24px rgba(255, 119, 0, 0.12);
 }
+
+/* Sci-fi Orange Corner Brackets */
+.hud-corner {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-color: var(--hud-orange);
+  border-style: solid;
+  pointer-events: none;
+}
+
+.hud-corner-tl {
+  top: 0;
+  left: 0;
+  border-width: 2px 0 0 2px;
+  border-top-left-radius: 6px;
+}
+
+.hud-corner-tr {
+  top: 0;
+  right: 0;
+  border-width: 2px 2px 0 0;
+  border-top-right-radius: 6px;
+}
+
+.hud-corner-bl {
+  bottom: 0;
+  left: 0;
+  border-width: 0 0 2px 2px;
+  border-bottom-left-radius: 6px;
+}
+
+.hud-corner-br {
+  bottom: 0;
+  right: 0;
+  border-width: 0 2px 2px 0;
+  border-bottom-right-radius: 6px;
+}
+
+/* Neon Orange & Gold Text Glow */
+.hud-text-glow {
+  text-shadow: 0 0 10px rgba(255, 119, 0, 0.7), 0 0 22px rgba(255, 140, 0, 0.4);
+}
+
+.hud-gold-glow {
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.7);
+}
+
+
