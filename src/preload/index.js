@@ -5,11 +5,24 @@ import { electronAPI } from '@electron-toolkit/preload'
 const api = {}
 
 const evApi = {
-  getStatus: () => ipcRenderer.invoke('ev:status')
+  getStatus: () => ipcRenderer.invoke('ev:status'),
+  command: (command) => ipcRenderer.invoke('ev:command', command),
+  system: {
+    getCPU: () => ipcRenderer.invoke('ev:cpu:stats'),
+    getStats: () => ipcRenderer.invoke('ev:system:stats'),
+    getSystemStats: () => ipcRenderer.invoke('ev:system:stats'),
+    command: (command) =>
+      ipcRenderer.invoke('ev:command', command)
+
+  }
 }
 
 const systemApi = {
-  getSystemStats: () => ipcRenderer.invoke('ev:system:stats')
+  getCPU: () => ipcRenderer.invoke('ev:cpu:stats'),
+  getStats: () => ipcRenderer.invoke('ev:system:stats'),
+  getSystemStats: () => ipcRenderer.invoke('ev:system:stats'),
+  command: (command) =>
+    ipcRenderer.invoke('ev:command', command)
 }
 
 const windowControlsApi = {
@@ -28,6 +41,7 @@ if (process.contextIsolated) {
     contextBridge.exposeInMainWorld('ev', evApi)
     contextBridge.exposeInMainWorld('system', systemApi)
     contextBridge.exposeInMainWorld('windowControls', windowControlsApi)
+    contextBridge.exposeInMainWorld('evSystem', systemApi)
   } catch (error) {
     console.error(error)
   }
@@ -37,6 +51,7 @@ if (process.contextIsolated) {
   window.ev = evApi
   window.system = systemApi
   window.windowControls = windowControlsApi
+  window.evSystem = systemApi
 }
 
 
