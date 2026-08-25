@@ -2,13 +2,15 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-import { getSystemStats } from './system'
-
+import { getSystemStats, getCPU } from './system'
+import { processCommand } from './brain/index.js'
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
-    width: 1080,
-    height: 760,
+    width: 500,
+    height: 700,
+    alwaysOnTop: true,
+    resizable:false,
     show: false,
     autoHideMenuBar: true,
     transparent: true,
@@ -19,12 +21,16 @@ function createWindow() {
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false,
+      nodeIntegration: false,
       contextIsolation: true
     }
   })
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
+    if (is.dev) {
+      mainWindow.webContents.openDevTools({ mode: 'detach' })
+    }
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
@@ -54,12 +60,31 @@ app.whenReady().then(() => {
     }
   })
 
+  ipcMain.handle('ev:cpu:stats', async () => {
+    try {
+      return await getCPU()
+    } catch (error) {
+      console.error('Error getting CPU stats:', error)
+      return { usage: 0 }
+    }
+  })
+
   ipcMain.handle('ev:system:stats', async () => {
     try {
       return await getSystemStats()
     } catch (error) {
       console.error('Error getting system stats:', error)
 
+      throw error
+    }
+  })
+
+  ipcMain.handle('ev:command', async (_, command) => {
+    try {
+      const result = processCommand(command)
+      return result
+    } catch (error) {
+      console.error('EV command processing failed:', error)
       throw error
     }
   })
