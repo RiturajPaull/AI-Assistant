@@ -1,12 +1,66 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './styles/index.css'
 import ResponseRenderer from './components/responses/ResponseRenderer'
 import useVoiceRecorder from './hooks/useVoiceRecorder'
-import { Mic, MicOff, Loader2 } from 'lucide-react'
+import speak, {
+  getAvailableVoices,
+  previewVoiceByObj,
+  stopSpeech,
+  subscribeSpeechState
+} from './utils/tts'
+import { Mic, MicOff, Loader2, Square } from 'lucide-react'
 
 function App() {
   const [response, setResponse] = useState(null)
   const [command, setCommand] = useState('')
+  const [systemVoices, setSystemVoices] = useState([])
+  const [activeVoiceName, setActiveVoiceName] = useState('')
+  const [isSpeaking, setIsSpeaking] = useState(false)
+
+  useEffect(() => {
+    const unsubscribe = subscribeSpeechState((speakingState) => {
+      setIsSpeaking(speakingState)
+    })
+
+    const fetchSystemVoices = () => {
+      const available = getAvailableVoices()
+      setSystemVoices(available)
+      if (available.length > 0 && !activeVoiceName) {
+        const defaultV =
+          available.find((v) => v.name.toLowerCase().includes('zira')) || available[0]
+        setActiveVoiceName(defaultV.name)
+      }
+    }
+
+    fetchSystemVoices()
+    if (typeof window !== 'undefined' && window.speechSynthesis) {
+      window.speechSynthesis.onvoiceschanged = fetchSystemVoices
+    }
+
+    return () => {
+      unsubscribe()
+    }
+  }, [])
+
+  const showResponse = (responseData) => {
+    setResponse(responseData)
+
+    // Trigger Text-to-Speech voice synthesis aloud
+    if (responseData?.data?.message) {
+      speak(responseData.data.message)
+    } else if (typeof responseData?.data === 'string') {
+      speak(responseData.data)
+    }
+
+    setTimeout(() => {
+      setResponse(null)
+    }, 8000)
+  }
+
+  const handleStopSpeech = () => {
+    stopSpeech()
+    setResponse(null)
+  }
 
   const executeCommand = async (textToRun) => {
     const trimmed = textToRun || command.trim()
@@ -54,11 +108,12 @@ function App() {
           case 'get_processes':
             await showProcesses()
             break
+          case 'chat':
           case 'unknown':
           default:
             showResponse({
               type: 'text',
-              data: `I did not understand: "${trimmed}"`
+              data: result.message || `I did not understand: "${trimmed}"`
             })
             break
         }
@@ -91,14 +146,6 @@ function App() {
     onError: handleVoiceError
   })
 
-  const showResponse = (responseData) => {
-    setResponse(responseData)
-
-    setTimeout(() => {
-      setResponse(null)
-    }, 5000)
-  }
-
   const sendCommand = async (e) => {
     if (e && e.preventDefault) e.preventDefault()
     await executeCommand(command)
@@ -123,10 +170,12 @@ function App() {
     try {
       if (window.ev?.system?.getCPU) {
         const cpu = await window.ev.system.getCPU()
+        speak(`CPU usage is at ${cpu.usage || 0} percent.`)
         return showResponse({ type: 'cpu', data: cpu })
       }
       const system = await getSystem()
       if (system?.cpu) {
+        speak(`CPU usage is at ${system.cpu.usage || 0} percent.`)
         showResponse({ type: 'cpu', data: system.cpu })
       }
     } catch (e) {
@@ -138,6 +187,7 @@ function App() {
     try {
       const system = await getSystem()
       if (system?.memory) {
+        speak(`Memory usage is at ${system.memory.usage || 0} percent.`)
         showResponse({ type: 'memory', data: system.memory })
       }
     } catch (e) {
@@ -149,6 +199,7 @@ function App() {
     try {
       const system = await getSystem()
       if (system?.battery) {
+        speak(`Battery level is at ${system.battery.percent || 100} percent.`)
         showResponse({ type: 'battery', data: system.battery })
       }
     } catch (e) {
@@ -160,10 +211,19 @@ function App() {
     try {
       const system = await getSystem()
       if (system?.processes) {
+        speak(`Displaying top running processes.`)
         showResponse({ type: 'process', data: system.processes })
       }
     } catch (e) {
       console.error('showProcesses error:', e)
+    }
+  }
+
+  const handleVoiceSelect = (voiceName) => {
+    setActiveVoiceName(voiceName)
+    const targetObj = systemVoices.find((v) => v.name === voiceName)
+    if (targetObj) {
+      previewVoiceByObj(targetObj)
     }
   }
 
@@ -186,6 +246,18 @@ function App() {
           </div>
         </div>
       </div>
+
+      {isSpeaking && (
+        <button
+          type="button"
+          className="stop-voice-pill"
+          onClick={handleStopSpeech}
+          title="Stop EV Speech Immediately"
+        >
+          <Square size={11} fill="currentColor" />
+          <span>STOP SPEECH</span>
+        </button>
+      )}
 
       <ResponseRenderer response={response} />
 
@@ -236,6 +308,25 @@ function App() {
         <button type="button" onClick={showProcesses}>
           PROCESSES
         </button>
+
+        <div className="voice-test-group">
+          <span className="voice-label">VOICE:</span>
+          <select
+            className="voice-select"
+            value={activeVoiceName}
+            onChange={(e) => handleVoiceSelect(e.target.value)}
+          >
+            {systemVoices.length === 0 ? (
+              <option value="">Loading system voices...</option>
+            ) : (
+              systemVoices.map((v) => (
+                <option key={v.name} value={v.name}>
+                  {v.name.replace(/^Microsoft\s*/i, '').replace(/\s*Desktop/i, '')}
+                </option>
+              ))
+            )}
+          </select>
+        </div>
       </div>
     </div>
   )
