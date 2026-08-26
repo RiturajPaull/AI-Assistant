@@ -258,19 +258,20 @@ If you are recreating the project from scratch or installing packages individual
 
 These runtime packages are bundled into the final application build:
 
-| Package | Version | Purpose & Usage in EV |
-| :--- | :--- | :--- |
-| **`@electron-toolkit/preload`** | `^3.0.2` | Context bridge helpers to expose safe APIs from preload scripts to the renderer. |
-| **`@electron-toolkit/utils`** | `^4.0.0` | Utilities for window shortcut management, platform checks, and app lifecycle. |
-| **`@tailwindcss/vite`** | `^4.3.3` | Vite plugin integration for Tailwind CSS v4. |
-| **`tailwindcss`** | `^4.3.3` | Next-generation utility-first styling engine used for HUD and dashboard design. |
-| **`better-sqlite3`** | `^13.0.3` | Fastest synchronous SQLite3 client for local chat history, state persistence, and settings. |
-| **`framer-motion`** | `^13.1.1` | Production-ready motion and gesture library for floating card animations and HUD effects. |
-| **`lucide-react`** | `^1.34.0` | Clean, customizable icon set for hardware status, navigation, and controls. |
-| **`ollama`** | `^0.6.3` | Official JavaScript client for interacting with local Ollama LLMs (e.g., Llama 3, Mistral). |
-| **`systeminformation`** | `^5.33.2` | System hardware profiling library (CPU load, RAM usage, battery levels, processes, GPU). |
+| Package                         | Version   | Purpose & Usage in EV                                                                       |
+| :------------------------------ | :-------- | :------------------------------------------------------------------------------------------ |
+| **`@electron-toolkit/preload`** | `^3.0.2`  | Context bridge helpers to expose safe APIs from preload scripts to the renderer.            |
+| **`@electron-toolkit/utils`**   | `^4.0.0`  | Utilities for window shortcut management, platform checks, and app lifecycle.               |
+| **`@tailwindcss/vite`**         | `^4.3.3`  | Vite plugin integration for Tailwind CSS v4.                                                |
+| **`tailwindcss`**               | `^4.3.3`  | Next-generation utility-first styling engine used for HUD and dashboard design.             |
+| **`better-sqlite3`**            | `^13.0.3` | Fastest synchronous SQLite3 client for local chat history, state persistence, and settings. |
+| **`framer-motion`**             | `^13.1.1` | Production-ready motion and gesture library for floating card animations and HUD effects.   |
+| **`lucide-react`**              | `^1.34.0` | Clean, customizable icon set for hardware status, navigation, and controls.                 |
+| **`ollama`**                    | `^0.6.3`  | Official JavaScript client for interacting with local Ollama LLMs (e.g., Llama 3, Mistral). |
+| **`systeminformation`**         | `^5.33.2` | System hardware profiling library (CPU load, RAM usage, battery levels, processes, GPU).    |
 
 #### 📥 Single Command to Install All Production Dependencies:
+
 ```bash
 npm install @electron-toolkit/preload @electron-toolkit/utils @tailwindcss/vite tailwindcss better-sqlite3 framer-motion lucide-react ollama systeminformation
 ```
@@ -281,24 +282,25 @@ npm install @electron-toolkit/preload @electron-toolkit/utils @tailwindcss/vite 
 
 These tools are only used during development, linting, formatting, and packaging:
 
-| Package | Version | Purpose |
-| :--- | :--- | :--- |
-| **`electron`** | `^43.4.1` | The cross-platform desktop application framework. |
-| **`electron-vite`** | `^5.0.0` | Next-generation build tool and dev server tailored for Electron + Vite. |
-| **`vite`** | `^7.2.6` | Frontend bundler offering instantaneous HMR for the React UI. |
-| **`react`** | `^19.2.1` | Core React 19 UI component library. |
-| **`react-dom`** | `^19.2.1` | React DOM renderer for desktop web views. |
-| **`@vitejs/plugin-react`** | `^5.1.1` | Fast Refresh and JSX transformation plugin for Vite. |
-| **`electron-builder`** | `^26.0.12` | Complete packaging solution for generating `.exe`, `.dmg`, `.AppImage`, and `.deb` installers. |
-| **`eslint`** | `^9.39.1` | Pluggable JavaScript linter. |
-| **`eslint-plugin-react`** | `^7.37.5` | React specific linting rules. |
-| **`eslint-plugin-react-hooks`** | `^7.0.1` | ESLint rules for React Hooks correctness. |
-| **`eslint-plugin-react-refresh`** | `^0.4.24` | Validates components for hot module reloading. |
-| **`@electron-toolkit/eslint-config`** | `^2.1.0` | Standard ESLint shareable configurations for Electron. |
-| **`@electron-toolkit/eslint-config-prettier`**| `^3.0.0` | Turns off conflicting ESLint formatting rules with Prettier. |
-| **`prettier`** | `^3.7.4` | Automated code formatting engine. |
+| Package                                        | Version    | Purpose                                                                                        |
+| :--------------------------------------------- | :--------- | :--------------------------------------------------------------------------------------------- |
+| **`electron`**                                 | `^43.4.1`  | The cross-platform desktop application framework.                                              |
+| **`electron-vite`**                            | `^5.0.0`   | Next-generation build tool and dev server tailored for Electron + Vite.                        |
+| **`vite`**                                     | `^7.2.6`   | Frontend bundler offering instantaneous HMR for the React UI.                                  |
+| **`react`**                                    | `^19.2.1`  | Core React 19 UI component library.                                                            |
+| **`react-dom`**                                | `^19.2.1`  | React DOM renderer for desktop web views.                                                      |
+| **`@vitejs/plugin-react`**                     | `^5.1.1`   | Fast Refresh and JSX transformation plugin for Vite.                                           |
+| **`electron-builder`**                         | `^26.0.12` | Complete packaging solution for generating `.exe`, `.dmg`, `.AppImage`, and `.deb` installers. |
+| **`eslint`**                                   | `^9.39.1`  | Pluggable JavaScript linter.                                                                   |
+| **`eslint-plugin-react`**                      | `^7.37.5`  | React specific linting rules.                                                                  |
+| **`eslint-plugin-react-hooks`**                | `^7.0.1`   | ESLint rules for React Hooks correctness.                                                      |
+| **`eslint-plugin-react-refresh`**              | `^0.4.24`  | Validates components for hot module reloading.                                                 |
+| **`@electron-toolkit/eslint-config`**          | `^2.1.0`   | Standard ESLint shareable configurations for Electron.                                         |
+| **`@electron-toolkit/eslint-config-prettier`** | `^3.0.0`   | Turns off conflicting ESLint formatting rules with Prettier.                                   |
+| **`prettier`**                                 | `^3.7.4`   | Automated code formatting engine.                                                              |
 
 #### 📥 Single Command to Install All Development Dependencies:
+
 ```bash
 npm install -D electron electron-vite vite react react-dom @vitejs/plugin-react electron-builder eslint eslint-plugin-react eslint-plugin-react-hooks eslint-plugin-react-refresh @electron-toolkit/eslint-config @electron-toolkit/eslint-config-prettier prettier
 ```
@@ -307,18 +309,18 @@ npm install -D electron electron-vite vite react react-dom @vitejs/plugin-react 
 
 ## 🛠 Available NPM Scripts
 
-| Command | Description |
-| :--- | :--- |
-| `npm run dev` | Starts the Electron app in development mode with HMR for main, preload, and renderer. |
-| `npm run build` | Builds and compiles all three targets (main, preload, renderer) into `./out`. |
-| `npm run start` | Previews the compiled production build locally. |
-| `npm run postinstall` | Rebuilds native Node.js addons (`better-sqlite3`) for the current Electron version. |
-| `npm run build:win` | Builds the app and generates a Windows NSIS installer (`.exe`). |
-| `npm run build:mac` | Builds the app and generates macOS package (`.dmg`). |
-| `npm run build:linux` | Builds the app for Linux (`.AppImage`, `.deb`, `.snap`). |
+| Command                | Description                                                                                  |
+| :--------------------- | :------------------------------------------------------------------------------------------- |
+| `npm run dev`          | Starts the Electron app in development mode with HMR for main, preload, and renderer.        |
+| `npm run build`        | Builds and compiles all three targets (main, preload, renderer) into `./out`.                |
+| `npm run start`        | Previews the compiled production build locally.                                              |
+| `npm run postinstall`  | Rebuilds native Node.js addons (`better-sqlite3`) for the current Electron version.          |
+| `npm run build:win`    | Builds the app and generates a Windows NSIS installer (`.exe`).                              |
+| `npm run build:mac`    | Builds the app and generates macOS package (`.dmg`).                                         |
+| `npm run build:linux`  | Builds the app for Linux (`.AppImage`, `.deb`, `.snap`).                                     |
 | `npm run build:unpack` | Builds into an unpacked directory for fast executable testing without creating an installer. |
-| `npm run lint` | Runs ESLint across all source files to find syntax or style issues. |
-| `npm run format` | Runs Prettier to auto-format all code in the workspace. |
+| `npm run lint`         | Runs ESLint across all source files to find syntax or style issues.                          |
+| `npm run format`       | Runs Prettier to auto-format all code in the workspace.                                      |
 
 ---
 
@@ -330,19 +332,19 @@ The application uses Electron's `contextBridge` to expose a secure API surface t
 
 ```javascript
 // Check backend status
-const status = await window.ev.getStatus();
+const status = await window.ev.getStatus()
 
 // Send natural language or system command
-const result = await window.ev.command('show me cpu usage');
+const result = await window.ev.command('show me cpu usage')
 
 // Hardware diagnostics
-const cpu = await window.ev.system.getCPU();
-const fullStats = await window.ev.system.getStats();
+const cpu = await window.ev.system.getCPU()
+const fullStats = await window.ev.system.getStats()
 
 // Window Controls
-window.windowControls.minimize();
-window.windowControls.maximize();
-window.windowControls.close();
+window.windowControls.minimize()
+window.windowControls.maximize()
+window.windowControls.close()
 ```
 
 ---
@@ -351,13 +353,13 @@ window.windowControls.close();
 
 The intent engine (`src/main/brain/intent.js`) inspects user prompts and categorizes them into actionable operations:
 
-| Recognized Keywords | Detected Intent | Triggered Action |
-| :--- | :--- | :--- |
-| `cpu`, `processor` | `get_cpu` | Reads CPU load, model, speed, and cores |
-| `ram`, `memory` | `get_memory` | Computes active, free, and total system RAM |
-| `battery`, `charge` | `get_battery` | Queries battery level and charging state |
+| Recognized Keywords  | Detected Intent | Triggered Action                                |
+| :------------------- | :-------------- | :---------------------------------------------- |
+| `cpu`, `processor`   | `get_cpu`       | Reads CPU load, model, speed, and cores         |
+| `ram`, `memory`      | `get_memory`    | Computes active, free, and total system RAM     |
+| `battery`, `charge`  | `get_battery`   | Queries battery level and charging state        |
 | `process`, `running` | `get_processes` | Fetches active running tasks & memory consumers |
-| *Other text* | `unknown` | Forwards prompt to local AI / LLM pipeline |
+| _Other text_         | `unknown`       | Forwards prompt to local AI / LLM pipeline      |
 
 ---
 
@@ -409,31 +411,39 @@ For the best developer experience, use **VS Code** with the following extensions
 <summary><b>1. Error: The module '...better_sqlite3.node' was compiled against a different Node.js version</b></summary>
 
 Run the following command in your terminal to recompile against Electron's Node headers:
+
 ```bash
 npx electron-builder install-app-deps
 ```
+
 or
+
 ```bash
 npx @electron/rebuild -f -w better-sqlite3
 ```
+
 </details>
 
 <details>
 <summary><b>2. The window is transparent or black screen on Linux</b></summary>
 
 Some Linux window managers require specific compositor settings or disabling GPU hardware acceleration flags:
+
 ```bash
 npm run dev -- --no-sandbox --disable-gpu
 ```
+
 </details>
 
 <details>
 <summary><b>3. Ollama connection refused (`ECONNREFUSED 127.0.0.1:11434`)</b></summary>
 
 Ensure Ollama is started:
+
 ```bash
 ollama serve
 ```
+
 </details>
 
 ---

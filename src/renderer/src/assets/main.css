@@ -15,14 +15,19 @@
   --hud-border-bright: rgba(255, 165, 0, 0.8);
 }
 
-html, body {
+html,
+body {
   background: transparent !important;
   background-color: transparent !important;
   margin: 0;
   padding: 0;
   overflow: hidden;
   user-select: none;
-  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-family:
+    'Segoe UI',
+    system-ui,
+    -apple-system,
+    sans-serif;
   color: #fff7ed;
 }
 
@@ -66,7 +71,8 @@ html, body {
 
 /* Orange Arc Reactor Animation */
 @keyframes arcPulseOrange {
-  0%, 100% {
+  0%,
+  100% {
     transform: rotate(0deg) scale(1);
     opacity: 0.85;
     filter: drop-shadow(0 0 10px #ff7700);
@@ -79,11 +85,16 @@ html, body {
 }
 
 @keyframes orangePulseGlow {
-  0%, 100% {
-    box-shadow: 0 0 16px rgba(255, 119, 0, 0.2), inset 0 0 14px rgba(255, 119, 0, 0.06);
+  0%,
+  100% {
+    box-shadow:
+      0 0 16px rgba(255, 119, 0, 0.2),
+      inset 0 0 14px rgba(255, 119, 0, 0.06);
   }
   50% {
-    box-shadow: 0 0 30px rgba(255, 140, 0, 0.35), inset 0 0 22px rgba(255, 140, 0, 0.12);
+    box-shadow:
+      0 0 30px rgba(255, 140, 0, 0.35),
+      inset 0 0 22px rgba(255, 140, 0, 0.12);
   }
 }
 
@@ -92,7 +103,9 @@ html, body {
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid var(--hud-border);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), inset 0 0 18px rgba(255, 119, 0, 0.06);
+  box-shadow:
+    0 8px 32px 0 rgba(0, 0, 0, 0.5),
+    inset 0 0 18px rgba(255, 119, 0, 0.06);
   border-radius: 12px;
   position: relative;
   overflow: hidden;
@@ -101,7 +114,9 @@ html, body {
 
 .hud-panel:hover {
   border-color: var(--hud-border-bright);
-  box-shadow: 0 10px 40px 0 rgba(255, 119, 0, 0.25), inset 0 0 24px rgba(255, 119, 0, 0.12);
+  box-shadow:
+    0 10px 40px 0 rgba(255, 119, 0, 0.25),
+    inset 0 0 24px rgba(255, 119, 0, 0.12);
 }
 
 /* Sci-fi Orange Corner Brackets */
@@ -144,11 +159,11 @@ html, body {
 
 /* Neon Orange & Gold Text Glow */
 .hud-text-glow {
-  text-shadow: 0 0 10px rgba(255, 119, 0, 0.7), 0 0 22px rgba(255, 140, 0, 0.4);
+  text-shadow:
+    0 0 10px rgba(255, 119, 0, 0.7),
+    0 0 22px rgba(255, 140, 0, 0.4);
 }
 
 .hud-gold-glow {
   text-shadow: 0 0 10px rgba(251, 191, 36, 0.7);
 }
-
-
