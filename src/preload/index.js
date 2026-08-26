@@ -7,13 +7,14 @@ const api = {}
 const evApi = {
   getStatus: () => ipcRenderer.invoke('ev:status'),
   command: (command) => ipcRenderer.invoke('ev:command', command),
+  openApp: (appName) => ipcRenderer.invoke('ev:app:open', appName),
+  transcribeAudio: (arrayBuffer, mimeType, apiKey) =>
+    ipcRenderer.invoke('ev:transcribe', arrayBuffer, mimeType, apiKey),
   system: {
     getCPU: () => ipcRenderer.invoke('ev:cpu:stats'),
     getStats: () => ipcRenderer.invoke('ev:system:stats'),
     getSystemStats: () => ipcRenderer.invoke('ev:system:stats'),
-    command: (command) =>
-      ipcRenderer.invoke('ev:command', command)
-
+    command: (command) => ipcRenderer.invoke('ev:command', command)
   }
 }
 
@@ -21,8 +22,7 @@ const systemApi = {
   getCPU: () => ipcRenderer.invoke('ev:cpu:stats'),
   getStats: () => ipcRenderer.invoke('ev:system:stats'),
   getSystemStats: () => ipcRenderer.invoke('ev:system:stats'),
-  command: (command) =>
-    ipcRenderer.invoke('ev:command', command)
+  command: (command) => ipcRenderer.invoke('ev:command', command)
 }
 
 const windowControlsApi = {
@@ -53,5 +53,3 @@ if (process.contextIsolated) {
   window.windowControls = windowControlsApi
   window.evSystem = systemApi
 }
-
-

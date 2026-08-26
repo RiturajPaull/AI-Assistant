@@ -31,4 +31,4 @@ export async function getCPU() {
       usage: 0
     }
   }
-}
+}
