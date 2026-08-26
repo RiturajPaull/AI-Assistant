@@ -1,5 +1,6 @@
 import { detectIntent } from './intent.js'
 import { openApplication } from '../tools/applications/open.js'
+import { askLLM } from '../ai/llm.js'
 
 const OPEN_APP_RESPONSES = [
   (app) => `Sure thing! Opening ${app} for you now...`,
@@ -48,9 +49,27 @@ export async function processCommand(command) {
     }
   }
 
-  return {
-    command,
-    intent: intentName,
-    appName: result.appName || null
+  if (['get_cpu', 'get_memory', 'get_battery', 'get_processes'].includes(intentName)) {
+    return {
+      command,
+      intent: intentName,
+      appName: result.appName || null
+    }
+  }
+
+  // Conversational AI fallback for general chat, questions, stories, facts, etc.
+  try {
+    const aiResponse = await askLLM(command)
+    return {
+      command,
+      intent: 'chat',
+      message: aiResponse
+    }
+  } catch (err) {
+    return {
+      command,
+      intent: 'chat',
+      message: `I'm EV. How can I assist you today?`
+    }
   }
 }
