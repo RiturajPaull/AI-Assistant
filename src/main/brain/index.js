@@ -1,75 +1,38 @@
+import { runAgent } from '../ai/agent.js'
 import { detectIntent } from './intent.js'
-import { openApplication } from '../tools/applications/open.js'
-import { askLLM } from '../ai/llm.js'
-
-const OPEN_APP_RESPONSES = [
-  (app) => `Sure thing! Opening ${app} for you now...`,
-  (app) => `On it! Launching ${app}...`,
-  (app) => `Right away! Opening ${app}...`,
-  (app) => `Got it! Starting ${app} now...`,
-  (app) => `Opening ${app}...`
-]
-
-const FAILED_APP_RESPONSES = [
-  (app) => `Sorry, I couldn't open ${app}. Please check if it's installed.`,
-  (app) => `Unable to launch ${app} right now.`,
-  (app) => `Could not find application ${app} on your system.`
-]
-
-function getRandomResponse(responses, appName) {
-  const formattedApp = appName ? appName.charAt(0).toUpperCase() + appName.slice(1) : 'Application'
-  const fn = responses[Math.floor(Math.random() * responses.length)]
-  return fn(formattedApp)
-}
 
 export async function processCommand(command) {
-  const result = detectIntent(command)
-  const intentName = result.intent
-
-  if (intentName === 'open_app' && result.appName) {
-    try {
-      await openApplication(result.appName)
-      const speechText = getRandomResponse(OPEN_APP_RESPONSES, result.appName)
-      return {
-        command,
-        intent: 'open_app',
-        appName: result.appName,
-        success: true,
-        message: speechText
-      }
-    } catch (error) {
-      const speechText = getRandomResponse(FAILED_APP_RESPONSES, result.appName)
-      return {
-        command,
-        intent: 'open_app',
-        appName: result.appName,
-        success: false,
-        message: speechText
-      }
-    }
+  if (!command || typeof command !== 'string') {
+    return { command: '', intent: 'unknown', message: 'No input provided.' }
   }
 
-  if (['get_cpu', 'get_memory', 'get_battery', 'get_processes'].includes(intentName)) {
-    return {
-      command,
-      intent: intentName,
-      appName: result.appName || null
-    }
-  }
+  console.log(`\n==================================================`)
+  console.log(`[STEP 1: USER INPUT RECEIVED] -> "${command}"`)
+  console.log(`==================================================`)
 
-  // Conversational AI fallback for general chat, questions, stories, facts, etc.
+  // Fast-path intent detection for hardware vitals UI widget updates if needed
+  const intentCheck = detectIntent(command)
+
   try {
-    const aiResponse = await askLLM(command)
+    // Process input via AI Agent & Standalone MCP Tool Servers
+    const agentResult = await runAgent(command)
+
+    console.log(`[STEP 7: FINAL RESPONSE TO RENDERER] -> "${agentResult.message}"\n`)
+
     return {
       command,
-      intent: 'chat',
-      message: aiResponse
+      intent: intentCheck.intent !== 'unknown' ? intentCheck.intent : 'agent',
+      appName: intentCheck.appName || null,
+      success: agentResult.success,
+      message: agentResult.message
     }
   } catch (err) {
+    console.error('[Brain] Error processing command:', err)
     return {
       command,
       intent: 'chat',
-      message: `I'm EV. How can I assist you today?`
+      success: false,
+      message: `I encountered an issue processing that: ${err.message}`
     }
   }
 }
