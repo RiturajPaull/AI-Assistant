@@ -1,0 +1,24 @@
+{
+  "mcpServers": {
+    "system": {
+      "command": "node",
+      "args": ["./src/main/mcp/servers/systemServer.mjs"]
+    },
+    "applications": {
+      "command": "node",
+      "args": ["./src/main/mcp/servers/appServer.mjs"]
+    },
+    "filesystem": {
+      "command": "node",
+      "args": ["./src/main/mcp/servers/filesystemServer.mjs"]
+    },
+    "terminal": {
+      "command": "node",
+      "args": ["./src/main/mcp/servers/terminalServer.mjs"]
+    },
+    "browser": {
+      "command": "node",
+      "args": ["./src/main/mcp/servers/browserServer.mjs"]
+    }
+  }
+}

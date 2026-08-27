@@ -1,9 +1,6 @@
 import fs from 'fs'
 import path from 'path'
 
-/**
- * Reads GROQ_API_KEY directly from environment or root .env file.
- */
 function getApiKey() {
   if (process.env.GROQ_API_KEY && process.env.GROQ_API_KEY.trim()) {
     return process.env.GROQ_API_KEY.trim()
@@ -19,7 +16,7 @@ function getApiKey() {
       const match = content.match(/GROQ_API_KEY\s*=\s*(.+)/)
       if (match && match[1]) {
         const key = match[1].trim()
-        if (key) return key
+        if (key && !key.includes('YOUR_')) return key
       }
     }
   } catch (err) {
@@ -30,51 +27,41 @@ function getApiKey() {
 }
 
 /**
- * Speech-to-Text transcriber using Groq/OpenAI Whisper API.
- * Transcribes audio buffer to text in ~0.2s.
+ * Speech-to-Text transcriber using Whisper API with free fallback.
  */
 export async function transcribeAudio(audioBuffer, mimeType = 'audio/webm', apiKey = '') {
   const activeKey = apiKey || getApiKey()
 
-  if (!activeKey) {
-    console.warn('No GROQ_API_KEY found in process.env or .env file.')
-    return transcribeWithFreeService(audioBuffer, mimeType)
-  }
+  if (activeKey) {
+    try {
+      const blob = new Blob([audioBuffer], { type: mimeType })
+      const formData = new FormData()
+      formData.append('file', blob, 'recording.webm')
+      formData.append('model', 'whisper-large-v3-turbo')
 
-  try {
-    const blob = new Blob([audioBuffer], { type: mimeType })
-    const formData = new FormData()
-    formData.append('file', blob, 'recording.webm')
-    formData.append('model', 'whisper-large-v3-turbo')
+      const response = await fetch('https://api.groq.com/openai/v1/audio/transcriptions', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${activeKey}`
+        },
+        body: formData
+      })
 
-    const response = await fetch('https://api.groq.com/openai/v1/audio/transcriptions', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${activeKey}`
-      },
-      body: formData
-    })
-
-    if (response.ok) {
-      const data = await response.json()
-      if (data && data.text && data.text.trim()) {
-        console.log('Whisper STT transcribed:', data.text.trim())
-        return data.text.trim()
+      if (response.ok) {
+        const data = await response.json()
+        if (data && data.text && data.text.trim()) {
+          console.log('Whisper STT transcribed:', data.text.trim())
+          return data.text.trim()
+        }
       }
-    } else {
-      const errText = await response.text()
-      console.warn(`Groq STT API Error (${response.status}):`, errText)
+    } catch (error) {
+      console.warn('STT API fetch error:', error)
     }
-  } catch (error) {
-    console.warn('STT API fetch error:', error)
   }
 
   return transcribeWithFreeService(audioBuffer, mimeType)
 }
 
-/**
- * Secondary fallback transcription
- */
 async function transcribeWithFreeService(audioBuffer, mimeType) {
   try {
     const blob = new Blob([audioBuffer], { type: mimeType })
