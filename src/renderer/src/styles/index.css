@@ -1,16 +1,55 @@
-html,
-body,
-#root {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
+:root {
+  --ev-brand-color: #ffaa00;
+  --ev-accent-color: #ffaa00;
+  --ev-border-color: rgba(255, 157, 0, 0.55);
+  --ev-glow-color: rgba(255, 157, 0, 0.3);
+  --ev-bg-gradient: radial-gradient(circle at 50% 25%, rgba(22, 28, 48, 0.95) 0%, rgba(10, 14, 26, 0.98) 65%, rgba(4, 6, 12, 0.99) 100%);
+  --ev-text-color: #ffffff;
+  --ev-grid-color: rgba(255, 157, 0, 0.05);
 }
 
-body {
-  background: transparent;
-  overflow: hidden;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+/* 1. Cyber Dark Theme (Amber & Dark Navy - Default) */
+.ev-container.theme-cyber-dark {
+  --ev-brand-color: #ffaa00;
+  --ev-accent-color: #ffaa00;
+  --ev-border-color: rgba(255, 157, 0, 0.55);
+  --ev-glow-color: rgba(255, 157, 0, 0.3);
+  --ev-bg-gradient: radial-gradient(circle at 50% 25%, rgba(22, 28, 48, 0.95) 0%, rgba(10, 14, 26, 0.98) 65%, rgba(4, 6, 12, 0.99) 100%);
+  --ev-text-color: #ffffff;
+  --ev-grid-color: rgba(255, 157, 0, 0.05);
+}
+
+/* 2. Neon Cyan Synthwave Theme */
+.ev-container.theme-neon-cyan {
+  --ev-brand-color: #00f3ff;
+  --ev-accent-color: #00f3ff;
+  --ev-border-color: rgba(0, 243, 255, 0.65);
+  --ev-glow-color: rgba(0, 243, 255, 0.35);
+  --ev-bg-gradient: radial-gradient(circle at 50% 25%, rgba(10, 36, 68, 0.96) 0%, rgba(5, 18, 38, 0.98) 65%, rgba(2, 8, 20, 0.99) 100%);
+  --ev-text-color: #e2f8ff;
+  --ev-grid-color: rgba(0, 243, 255, 0.06);
+}
+
+/* 3. Matrix Protocol Green Theme */
+.ev-container.theme-matrix-green {
+  --ev-brand-color: #00ff9d;
+  --ev-accent-color: #00ff9d;
+  --ev-border-color: rgba(0, 255, 157, 0.65);
+  --ev-glow-color: rgba(0, 255, 157, 0.35);
+  --ev-bg-gradient: radial-gradient(circle at 50% 25%, rgba(8, 42, 24, 0.96) 0%, rgba(4, 22, 12, 0.98) 65%, rgba(1, 10, 5, 0.99) 100%);
+  --ev-text-color: #d6ffe9;
+  --ev-grid-color: rgba(0, 255, 157, 0.06);
+}
+
+/* 4. Ember Core Orange Theme */
+.ev-container.theme-ember-orange {
+  --ev-brand-color: #ff3300;
+  --ev-accent-color: #ff3300;
+  --ev-border-color: rgba(255, 51, 0, 0.65);
+  --ev-glow-color: rgba(255, 51, 0, 0.35);
+  --ev-bg-gradient: radial-gradient(circle at 50% 25%, rgba(52, 14, 14, 0.96) 0%, rgba(26, 6, 6, 0.98) 65%, rgba(12, 2, 2, 0.99) 100%);
+  --ev-text-color: #ffe4e0;
+  --ev-grid-color: rgba(255, 51, 0, 0.06);
 }
 
 .ev-container {
@@ -25,21 +64,22 @@ body {
 
   position: relative;
 
-  color: white;
+  color: var(--ev-text-color, #ffffff);
 
-  /* Futuristic Cyberpunk Dark HUD Background */
-  background: radial-gradient(circle at 50% 25%, rgba(22, 28, 48, 0.95) 0%, rgba(10, 14, 26, 0.98) 65%, rgba(4, 6, 12, 0.99) 100%);
+  /* Dynamic Theme HUD Background */
+  background: var(--ev-bg-gradient);
   backdrop-filter: blur(25px) saturate(180%);
   -webkit-backdrop-filter: blur(25px) saturate(180%);
 
-  border: 1.5px solid rgba(255, 157, 0, 0.5);
+  border: 1.5px solid var(--ev-border-color);
   border-radius: 24px;
 
   box-shadow:
     0 25px 60px rgba(0, 0, 0, 0.9),
-    0 0 35px rgba(255, 157, 0, 0.25),
-    inset 0 0 25px rgba(255, 157, 0, 0.06);
+    0 0 35px var(--ev-glow-color),
+    inset 0 0 25px var(--ev-glow-color);
   overflow: hidden;
+  transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease, color 0.4s ease;
 }
 
 /* Background Cyber Grid Layer */
@@ -50,11 +90,15 @@ body {
   width: 100%;
   height: 100%;
   background-image:
-    linear-gradient(rgba(255, 157, 0, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 157, 0, 0.04) 1px, transparent 1px);
+    linear-gradient(var(--ev-grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--ev-grid-color) 1px, transparent 1px);
   background-size: 24px 24px;
   pointer-events: none;
   z-index: 1;
+}
+
+.ev-hud-grid.hidden {
+  display: none !important;
 }
 
 /* App Header HUD Bar */
@@ -66,7 +110,7 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 0 4px 8px 4px;
-  border-bottom: 1px solid rgba(255, 157, 0, 0.25);
+  border-bottom: 1px solid var(--ev-border-color);
   z-index: 5;
 }
 
@@ -77,17 +121,17 @@ body {
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 2px;
-  color: #ffaa00;
+  color: var(--ev-brand-color);
   font-family: monospace;
-  text-shadow: 0 0 8px rgba(255, 170, 0, 0.5);
+  text-shadow: 0 0 8px var(--ev-glow-color);
 }
 
 .brand-dot {
   width: 6px;
   height: 6px;
-  background: #ffaa00;
+  background: var(--ev-brand-color);
   border-radius: 50%;
-  box-shadow: 0 0 8px #ffaa00;
+  box-shadow: 0 0 8px var(--ev-brand-color);
 }
 
 .hud-sys-tag {
@@ -123,7 +167,7 @@ body {
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  border: 1px dashed rgba(255, 157, 0, 0.35);
+  border: 1px dashed var(--ev-border-color);
   animation: rotateReticle 16s linear infinite;
   pointer-events: none;
 }
@@ -132,7 +176,7 @@ body {
   width: 90px;
   height: 90px;
 
-  border: 1.5px solid rgba(255, 119, 0, 0.7);
+  border: 1.5px solid var(--ev-border-color);
   border-radius: 50%;
 
   display: flex;
@@ -140,8 +184,8 @@ body {
   justify-content: center;
 
   box-shadow:
-    0 0 15px rgba(255, 119, 0, 0.35),
-    inset 0 0 10px rgba(255, 119, 0, 0.15);
+    0 0 15px var(--ev-glow-color),
+    inset 0 0 10px var(--ev-glow-color);
   animation: pulse 2s infinite;
   transition: all 0.4s ease;
 }
@@ -172,13 +216,13 @@ body {
   align-items: center;
   justify-content: center;
 
-  background: rgba(255, 119, 0, 0.1);
-  border: 1px solid rgba(255, 140, 0, 0.4);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--ev-border-color);
 
   font-size: 12px;
   letter-spacing: 3px;
-  color: #ffaa33;
-  text-shadow: 0 0 8px rgba(255, 119, 0, 0.6);
+  color: var(--ev-brand-color);
+  text-shadow: 0 0 8px var(--ev-glow-color);
   transition: all 0.4s ease;
 }
 
@@ -506,10 +550,10 @@ body {
 .command-box input {
   flex: 1;
   padding: 8px 12px;
-  background: rgba(18, 10, 4, 0.75);
-  border: 1px solid rgba(255, 119, 0, 0.4);
+  background: rgba(10, 14, 26, 0.75);
+  border: 1px solid var(--ev-border-color);
   border-radius: 8px;
-  color: #ffffff;
+  color: var(--ev-text-color);
   font-size: 12px;
   letter-spacing: 0.5px;
   outline: none;
@@ -518,21 +562,21 @@ body {
 }
 
 .command-box input::placeholder {
-  color: rgba(255, 170, 51, 0.45);
+  color: rgba(255, 255, 255, 0.45);
   font-size: 11px;
 }
 
 .command-box input:focus {
-  border-color: #ff9900;
-  box-shadow: 0 0 10px rgba(255, 119, 0, 0.35);
-  background: rgba(25, 14, 6, 0.85);
+  border-color: var(--ev-brand-color);
+  box-shadow: 0 0 10px var(--ev-glow-color);
+  background: rgba(16, 22, 40, 0.85);
 }
 
 .command-box button {
   padding: 8px 14px;
-  background: linear-gradient(135deg, rgba(255, 119, 0, 0.25), rgba(255, 170, 0, 0.15));
-  border: 1px solid rgba(255, 119, 0, 0.6);
-  color: #ffaa33;
+  background: rgba(10, 14, 26, 0.8);
+  border: 1px solid var(--ev-border-color);
+  color: var(--ev-brand-color);
   border-radius: 8px;
   cursor: pointer;
   letter-spacing: 1.5px;
@@ -542,9 +586,9 @@ body {
 }
 
 .command-box button:hover {
-  background: linear-gradient(135deg, rgba(255, 119, 0, 0.45), rgba(255, 170, 0, 0.3));
-  border-color: #ffaa00;
-  box-shadow: 0 0 12px rgba(255, 119, 0, 0.5);
+  background: var(--ev-glow-color);
+  border-color: var(--ev-brand-color);
+  box-shadow: 0 0 12px var(--ev-glow-color);
   color: #ffffff;
 }
 
@@ -1120,5 +1164,325 @@ body {
 .confirm-name-btn {
   width: 100%;
 }
+
+/* ==========================================================================
+   DISCREET CORNER SETTINGS BUTTON & SCI-FI MODAL SYSTEM
+   ========================================================================== */
+
+.ev-settings-trigger-btn {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  z-index: 20;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(10, 14, 26, 0.75);
+  border: 1.5px solid rgba(255, 157, 0, 0.5);
+  color: #ffaa00;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 0 12px rgba(255, 157, 0, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(8px);
+}
+
+.ev-settings-trigger-btn:hover {
+  background: rgba(255, 157, 0, 0.25);
+  border-color: #00f3ff;
+  color: #00f3ff;
+  box-shadow: 0 0 20px rgba(0, 243, 255, 0.6);
+  transform: rotate(60deg) scale(1.08);
+}
+
+.ev-settings-trigger-btn:active {
+  transform: scale(0.95);
+}
+
+/* Overlay Background */
+.ev-settings-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(4, 6, 14, 0.88);
+  backdrop-filter: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: modalFadeIn 0.25s ease-out forwards;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Modal Window Container */
+.ev-settings-modal {
+  width: 92%;
+  max-width: 680px;
+  height: 84%;
+  max-height: 500px;
+  background: radial-gradient(circle at 50% 0%, rgba(20, 26, 46, 0.98), rgba(8, 12, 22, 0.99));
+  border: 1.5px solid rgba(255, 157, 0, 0.6);
+  border-radius: 16px;
+  box-shadow:
+    0 0 40px rgba(255, 157, 0, 0.25),
+    0 0 15px rgba(0, 243, 255, 0.15),
+    inset 0 0 20px rgba(255, 157, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Modal Top Header */
+.ev-settings-header {
+  height: 46px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 157, 0, 0.3);
+  background: rgba(10, 14, 26, 0.6);
+}
+
+.ev-settings-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: monospace;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #ffaa00;
+  text-shadow: 0 0 8px rgba(255, 170, 0, 0.5);
+}
+
+.ev-settings-close-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 157, 0, 0.4);
+  color: rgba(255, 255, 255, 0.7);
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ev-settings-close-btn:hover {
+  background: rgba(255, 0, 85, 0.3);
+  border-color: #ff0055;
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(255, 0, 85, 0.5);
+}
+
+/* Saved Toast Notification */
+.ev-settings-toast {
+  position: absolute;
+  top: 52px;
+  right: 16px;
+  background: rgba(0, 255, 157, 0.2);
+  border: 1px solid #00ff9d;
+  color: #00ff9d;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-family: monospace;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 0 12px rgba(0, 255, 157, 0.4);
+  z-index: 20;
+  animation: fadeIn 0.2s ease;
+}
+
+/* Body Layout: Sidebar + Content */
+.ev-settings-body {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+/* Sidebar Navigation */
+.ev-settings-sidebar {
+  width: 175px;
+  background: rgba(6, 9, 18, 0.75);
+  border-right: 1px solid rgba(255, 157, 0, 0.25);
+  padding: 10px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-y: auto;
+}
+
+.ev-settings-tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: rgba(255, 255, 255, 0.65);
+  font-family: monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ev-settings-tab-btn:hover {
+  background: rgba(0, 243, 255, 0.1);
+  color: #00f3ff;
+  border-color: rgba(0, 243, 255, 0.3);
+}
+
+.ev-settings-tab-btn.active {
+  background: rgba(255, 157, 0, 0.18);
+  color: #ffaa00;
+  border-color: rgba(255, 157, 0, 0.7);
+  box-shadow: inset 0 0 10px rgba(255, 157, 0, 0.2), 0 0 8px rgba(255, 157, 0, 0.2);
+  font-weight: 700;
+}
+
+/* Content Area */
+.ev-settings-content {
+  flex: 1;
+  padding: 16px 20px;
+  overflow-y: auto;
+  background: rgba(10, 14, 26, 0.4);
+}
+
+.settings-section h3 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-family: monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: #00f3ff;
+  border-bottom: 1px dashed rgba(0, 243, 255, 0.3);
+  padding-bottom: 6px;
+  text-shadow: 0 0 6px rgba(0, 243, 255, 0.4);
+}
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.85);
+  font-family: monospace;
+}
+
+.setting-row label {
+  flex: 1;
+  padding-right: 12px;
+}
+
+.setting-row select,
+.setting-text-input {
+  background: rgba(14, 20, 36, 0.9);
+  border: 1px solid rgba(0, 243, 255, 0.4);
+  border-radius: 6px;
+  color: #ffffff;
+  padding: 5px 10px;
+  font-family: monospace;
+  font-size: 10px;
+  outline: none;
+  transition: all 0.2s ease;
+  min-width: 170px;
+}
+
+.setting-row select:focus,
+.setting-text-input:focus {
+  border-color: #ffaa00;
+  box-shadow: 0 0 10px rgba(255, 170, 0, 0.4);
+}
+
+.setting-row input[type='checkbox'] {
+  width: 16px;
+  height: 16px;
+  accent-color: #ffaa00;
+  cursor: pointer;
+}
+
+.setting-row input[type='range'] {
+  accent-color: #00f3ff;
+  cursor: pointer;
+  width: 150px;
+}
+
+.action-buttons-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.ev-btn-secondary {
+  padding: 7px 12px;
+  background: rgba(0, 243, 255, 0.12);
+  border: 1px solid rgba(0, 243, 255, 0.6);
+  color: #00f3ff;
+  border-radius: 6px;
+  font-family: monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.ev-btn-secondary:hover {
+  background: rgba(0, 243, 255, 0.3);
+  box-shadow: 0 0 12px rgba(0, 243, 255, 0.5);
+  color: #ffffff;
+}
+
+.ev-btn-danger {
+  padding: 7px 12px;
+  background: rgba(255, 0, 85, 0.15);
+  border: 1px solid rgba(255, 0, 85, 0.6);
+  color: #ff0055;
+  border-radius: 6px;
+  font-family: monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.ev-btn-danger:hover {
+  background: rgba(255, 0, 85, 0.35);
+  box-shadow: 0 0 12px rgba(255, 0, 85, 0.6);
+  color: #ffffff;
+}
+
 
 

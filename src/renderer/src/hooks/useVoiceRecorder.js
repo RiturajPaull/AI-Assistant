@@ -59,7 +59,31 @@ export function useVoiceRecorder(options = {}) {
     hasSpokenRef.current = false
 
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+      const rawSettings = localStorage.getItem('ev_user_settings')
+      let micSettings = {}
+      if (rawSettings) {
+        try {
+          const parsed = JSON.parse(rawSettings)
+          micSettings = parsed.microphone || {}
+        } catch (e) {
+          console.error(e)
+        }
+      }
+
+      const audioConstraints = {
+        noiseSuppression: micSettings.noiseSuppression !== false,
+        echoCancellation: micSettings.echoCancellation !== false
+      }
+      if (micSettings.deviceId && micSettings.deviceId !== 'default') {
+        audioConstraints.deviceId = { exact: micSettings.deviceId }
+      }
+
+      const effectiveSilenceThreshold = Math.max(
+        2,
+        20 - Math.round(((micSettings.sensitivity !== undefined ? micSettings.sensitivity : 75) / 100) * 18)
+      )
+
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: audioConstraints })
       streamRef.current = stream
 
       const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
@@ -98,7 +122,7 @@ export function useVoiceRecorder(options = {}) {
           const averageVolume = sum / dataArray.length
 
           // Check if user has started speaking
-          if (averageVolume > silenceThreshold) {
+          if (averageVolume > effectiveSilenceThreshold) {
             hasSpokenRef.current = true
             if (silenceTimerRef.current) {
               clearTimeout(silenceTimerRef.current)
