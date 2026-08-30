@@ -1,16 +1,18 @@
-# ⚡ EV — AI-Powered Desktop Assistant
+# ⚡ EV — Autonomous AI Desktop Assistant
 
 <div align="center">
 
 ![Electron](https://img.shields.io/badge/Electron-43.4.1-47848F?style=for-the-badge&logo=electron&logoColor=white)
 ![React](https://img.shields.io/badge/React-19.2.1-61DAFB?style=for-the-badge&logo=react&logoColor=black)
 ![Vite](https://img.shields.io/badge/Vite-7.2.6-646CFF?style=for-the-badge&logo=vite&logoColor=white)
-![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-v4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
-![Ollama](https://img.shields.io/badge/Ollama-0.6.3-black?style=for-the-badge&logo=ollama&logoColor=white)
+![FaceAPI](https://img.shields.io/badge/FaceAPI-Biometric_Auth-FFaA00?style=for-the-badge&logo=tensorflow&logoColor=white)
+![MCP](https://img.shields.io/badge/MCP-Model_Context_Protocol-purple?style=for-the-badge&logo=anthropic&logoColor=white)
+![Groq](https://img.shields.io/badge/Groq-Sub--Second_Speed-orange?style=for-the-badge&logo=fastapi&logoColor=white)
+![NVIDIA](https://img.shields.io/badge/NVIDIA-Nemotron_LLM-76B900?style=for-the-badge&logo=nvidia&logoColor=white)
 ![SQLite](https://img.shields.io/badge/SQLite-better--sqlite3-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
 
 <p align="center">
-  A futuristic, HUD-style intelligent desktop assistant built with <b>Electron</b>, <b>React 19</b>, <b>Vite</b>, and <b>Tailwind CSS</b>. EV monitors system vitals in real-time, interprets natural language commands, controls window states, and integrates with local AI models.
+  A futuristic, Cyberpunk HUD autonomous AI desktop assistant equipped with <b>Face Biometric Security & Owner Recognition</b>, <b>Model Context Protocol (MCP)</b>, sub-second <b>Groq LLM</b> & <b>NVIDIA Nemotron</b> intelligence, <b>Whisper STT</b> voice input, and native desktop tool execution.
 </p>
 
 </div>
@@ -19,431 +21,340 @@
 
 ## 📋 Table of Contents
 
-- [✨ Features](#-features)
-- [🏗 Architecture & Flow](#-architecture--flow)
-- [📁 Folder Structure](#-folder-structure)
-- [⚙️ Prerequisites & System Requirements](#️-prerequisites--system-requirements)
-- [🚀 Quick Start / Setup Guide](#-quick-start--setup-guide)
-- [📦 Detailed Package Breakdown & Installation](#-detailed-package-breakdown--installation)
-  - [Production Dependencies (`dependencies`)](#production-dependencies-dependencies)
-  - [Development Dependencies (`devDependencies`)](#development-dependencies-devdependencies)
+- [✨ Key Features](#-key-features)
+- [👤 Sci-Fi Face Biometric Security & Owner Profile Engine](#-sci-fi-face-biometric-security--owner-profile-engine)
+- [🏗 Comprehensive System Architecture & Flow](#-comprehensive-system-architecture--flow)
+- [⚙️ Prerequisites & Environment Setup](#️-prerequisites--environment-setup)
+- [🚀 Step-by-Step Installation Guide](#-step-by-step-installation-guide)
+- [🔑 Environment Variables Configuration (`.env`)](#-environment-variables-configuration-env)
+- [🔌 Model Context Protocol (MCP) Tool Servers](#-model-context-protocol-mcp-tool-servers)
+- [📂 Complete Project Directory Structure](#-complete-project-directory-structure)
+- [📦 Package & Dependency Breakdown](#-package--dependency-breakdown)
 - [🛠 Available NPM Scripts](#-available-npm-scripts)
-- [🔌 IPC & System Integration](#-ipc--system-integration)
-- [🧠 Brain & Intent Engine](#-brain--intent-engine)
-- [🧰 Native Module Compilation (better-sqlite3)](#-native-module-compilation-better-sqlite3)
-- [🤖 Optional: Setting up Ollama for Local AI](#-optional-setting-up-ollama-for-local-ai)
-- [🔧 Recommended IDE & Extensions](#-recommended-ide--extensions)
+- [⚡ Real-Time Hardware Diagnostics](#-real-time-hardware-diagnostics)
+- [🎙 Voice Input, TTS & Whisper Speech-to-Text](#-voice-input-tts--whisper-speech-to-text)
+- [🧰 Native Module Compilation (`better-sqlite3`)](#-native-module-compilation-better-sqlite3)
 - [❓ Troubleshooting & FAQ](#-troubleshooting--faq)
 
 ---
 
-## ✨ Features
+## ✨ Key Features
 
-- **Futuristic HUD UI**: Transparent, frameless glowing orb interface with smooth animations powered by Framer Motion.
-- **Real-Time Hardware Diagnostics**:
-  - 🖥️ **CPU**: Model, clock speed, core counts, real-time load/usage.
-  - 💾 **Memory**: Total, used, free RAM with active utilization percentages.
-  - 🔋 **Battery**: Battery level, charging state, remaining runtime.
-  - ⚡ **Processes**: Running process list with PID, CPU/RAM consumption, and status.
-  - 🎮 **GPU & Network**: Graphics controllers and active network interfaces.
-- **Natural Language Intent Parsing**: Rule-based & AI-ready intent parser (`src/main/brain/`).
-- **Local AI Readiness**: Integrated Ollama client for privacy-first, on-device intelligence.
-- **Local Embedded Storage**: High-performance SQLite database via `better-sqlite3`.
-- **Cross-Platform Tooling**: Built-in file system tools, browser automations, terminal execution hooks, and app controllers.
-- **Modular Electron Architecture**: Strict separation of Main Process, Preload Script (Context Isolation), and React Renderer.
+- **🛡️ Sci-Fi Face Biometric Security & Owner Recognition**: 3D facial landmark detection and 128D vector embedding comparison powered by `@vladmandic/face-api` (offline local model binaries). Supports owner name enrollment and personalized voice greetings (*"Access granted. Welcome back, [Your Name]!"*).
+- **📟 Futuristic Cyberpunk HUD Interface**: Inspired by sci-fi tactical displays, featuring a 16-segment HUD progress loader, rotating reticle rings, horizontal laser scanning sweep, telemetry grid readouts, ambient grid mesh, and dynamic status badges.
+- **🌐 Model Context Protocol (MCP) Desktop Tools**: Runs 5 standalone MCP tool servers over `stdio` streams for filesystem, system vitals, browser automation, terminal execution, and desktop applications.
+- **⚡ Ultra-Fast Dual LLM Engine**: Powered by **Groq API** (`qwen/qwen3.8-27b` with ~500ms latency) and **NVIDIA Nemotron NIM** API (`nvidia/nemotron-3.5-lightning-30b-a3b`, `mistralai/mistral-nemotron`) with strict request timeouts and automatic fallback.
+- **🎙 Voice Control & Whisper STT**: Integrated OpenAI Whisper Speech-to-Text engine paired with Karen-profile Speech Synthesis (TTS) for natural voice interaction.
+- **🔍 Smart Platform & Search URL Resolver**: Translates natural commands like *"EV, search lo-fi music on YouTube"* or *"electron js on GitHub"* into direct, query-targeted browser URLs.
+- **📊 Real-Time Hardware Diagnostics**: Live monitoring of CPU usage, multi-core loads, RAM capacity, battery charge level, and active processes via `systeminformation`.
+- **💾 Local Persistence**: High-performance synchronous SQLite storage via `better-sqlite3`.
 
 ---
 
-## 🏗 Architecture & Flow
+## 👤 Sci-Fi Face Biometric Security & Owner Profile Engine
+
+EV includes a built-in facial biometric authentication overlay that gates desktop access until the authorized owner is recognized.
 
 ```
-┌───────────────────────────────────────────────────────────┐
-│                    REACT RENDERER                         │
-│   (App.jsx, HUD Orb, Response Cards, Controls, Chat)      │
-└─────────────────────────────┬─────────────────────────────┘
-                              │ window.ev / window.system
-                              ▼
-┌───────────────────────────────────────────────────────────┐
-│                    PRELOAD BRIDGE                         │
-│         (contextBridge, ipcRenderer.invoke / send)        │
-└─────────────────────────────┬─────────────────────────────┘
-                              │ IPC Channels (ev:command, ev:system:stats, ...)
-                              ▼
-┌───────────────────────────────────────────────────────────┐
-│                    MAIN PROCESS                           │
-│  ┌─────────────────┬───────────────────┬───────────────┐  │
-│  │  Brain / Intent │ System Monitor    │ Tools & Exec  │  │
-│  │  (Ollama / NLU) │ (systeminformation)│ (FS, Browser) │  │
-│  └─────────────────┴───────────────────┴───────────────┘  │
-│  ┌─────────────────────────────────────────────────────┐  │
-│  │               better-sqlite3 Database               │  │
-│  └─────────────────────────────────────────────────────┘  │
-└───────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                              FACE BIOMETRIC AUTH OVERLAY                               │
+│                                                                                        │
+│   ┌────────────────────────┐  ┌────────────────────────┐  ┌─────────────────────────┐   │
+│   │   Webcam Feed & Laser   │  │   68 Facial Landmarks  │  │  128D Vector Matrix     │   │
+│   │   Sweep Viewport       │  │   Extraction Engine    │  │  Euclidean Match (<0.48)│   │
+│   └───────────┬────────────┘  └───────────┬────────────┘  └────────────┬────────────┘   │
+│               │                           │                            │                │
+│               └───────────────────────────┴────────────────────────────┘                │
+│                                           │                                             │
+│                                           ▼                                             │
+│                       ┌───────────────────────────────────────┐                         │
+│                       │   LOCAL STORAGE PROFILE REGISTRATION  │                         │
+│                       │   - Face Descriptor Float32 Array     │                         │
+│                       │   - Owner Name (e.g., "Tony")         │                         │
+│                       └───────────────────┬───────────────────┘                         │
+│                                           │                                             │
+│                                           ▼                                             │
+│                       ┌───────────────────────────────────────┐                         │
+│                       │    TTS VOCAL PERSONALIZED GREETING    │                         │
+│                       │  "Access granted. Welcome back, Tony!"│                         │
+│                       └───────────────────────────────────────┘                         │
+└────────────────────────────────────────────────────────────────────────────────────────┘
 ```
+
+### Key Biometric Features:
+- **Offline Model Execution**: Loads local model binaries (`tiny_face_detector`, `face_landmark_68`, `face_recognition`) directly from `/models/` without internet dependency, with CDN fallback.
+- **Owner Profile Enrollment**: Prompts new users for their custom name upon face capture and binds the profile to local storage.
+- **Personalized TTS Greetings**: Speaks custom greetings upon verification (`"Access granted. Welcome back, [Name]!"`).
+- **Telemetry Readouts**: Displays live facial landmarks count (68 points), Euclidean match distance score, Subject ID, and 256-bit encryption status.
 
 ---
 
-## 📁 Folder Structure
-
-Below is the complete project directory structure for initial setup:
+## 🏗 Comprehensive System Architecture & Flow
 
 ```
-EV/
-├── .editorconfig                # Coding style rules across editors
-├── .gitignore                   # Files and directories ignored by Git
-├── .prettierignore              # Files ignored by Prettier formatter
-├── .prettierrc.yaml             # Prettier code formatting rules
-├── .vscode/                     # VSCode recommended workspace settings
-├── build/                       # Build assets and icons for packaging
-│   ├── entitlements.mac.plist   # macOS security entitlements & permissions
-│   ├── icon.icns                # macOS application icon
-│   ├── icon.ico                 # Windows application icon
-│   └── icon.png                 # Application logo (PNG format)
-├── electron-builder.yml         # electron-builder packaging configurations
-├── electron.vite.config.mjs     # Electron-Vite multi-target build configuration
-├── eslint.config.mjs            # Flat ESLint configuration file
-├── package.json                 # Project manifest, dependencies, and scripts
-├── package-lock.json            # Lockfile for exact dependency versions
-├── README.md                    # Project documentation
-├── resources/                   # Runtime resources (icons, static assets)
-│   └── icon.png                 # Main window icon
-└── src/                         # Application source code
-    ├── main/                    # Electron Main Process (Node.js backend)
-    │   ├── ai/                  # AI integrations
-    │   │   ├── agent.js         # AI agent controller & workflow logic
-    │   │   ├── ollama.js        # Ollama local LLM client wrapper
-    │   │   └── prompt.js        # System prompts and instruction templates
-    │   ├── brain/               # Command processing & Intent detection
-    │   │   ├── index.js         # Brain pipeline entry point
-    │   │   └── intent.js        # Intent classification rules & heuristics
-    │   ├── database/            # SQLite storage layer
-    │   │   ├── db.js            # better-sqlite3 database initialization
-    │   │   ├── queries.js       # Prepared SQL queries and handlers
-    │   │   └── schema.js        # Database table schemas and migrations
-    │   ├── index.js             # Main Electron entry point & IPC handlers
-    │   ├── security/            # Security policies & permissions
-    │   │   ├── command-policy.js# Command execution safety rules
-    │   │   └── permissions.js   # Permission gates for system actions
-    │   ├── system/              # Hardware and OS diagnostics
-    │   │   ├── battery.js       # Battery status and power metrics
-    │   │   ├── cpu.js           # CPU usage, load, cores, and speed
-    │   │   ├── gpu.js           # GPU controller and display info
-    │   │   ├── index.js         # Unified system stats aggregator
-    │   │   ├── memory.js        # RAM capacity, used, and free stats
-    │   │   ├── network.js       # Network interfaces and latency stats
-    │   │   └── processes.js     # Running process list and metrics
-    │   └── tools/               # Executable system tools
-    │       ├── applications/    # App opening/closing helpers
-    │       │   ├── close.js
-    │       │   └── open.js
-    │       ├── browser/         # Web search and URL openers
-    │       │   └── browser.js
-    │       ├── filesystem/      # File reading, writing, and search
-    │       │   ├── read.js
-    │       │   ├── search.js
-    │       │   └── write.js
-    │       ├── index.js         # Unified tool registry
-    │       └── terminal/        # Terminal command executor
-    │           └── execute.js
-    ├── preload/                 # Electron Preload Scripts (Secure IPC Bridge)
-    │   └── index.js             # Exposes window.ev, window.system, window.electron
-    └── renderer/                # React 19 Frontend (User Interface)
-        ├── index.html           # HTML template for Vite
-        └── src/                 # React source files
-            ├── App.jsx          # Main HUD view, command form, and state
-            ├── main.jsx         # React DOM mount point
-            ├── assets/          # SVG icons and visual assets
-            │   ├── base.css
-            │   ├── electron.svg
-            │   ├── main.css
-            │   └── wavy-lines.svg
-            ├── components/      # UI components
-            │   └── responses/   # Response cards for system diagnostics
-            │       ├── BatteryCard.jsx
-            │       ├── CpuCard.jsx
-            │       ├── MemoryCard.jsx
-            │       ├── ProcessCard.jsx
-            │       ├── ResponseRenderer.jsx
-            │       └── TextCard.jsx
-            ├── pages/           # Application views/screens
-            │   ├── Chat.jsx
-            │   ├── Home.jsx
-            │   ├── Settings.jsx
-            │   └── System.jsx
-            ├── response/        # Response formatters
-            │   └── responseManager.js
-            └── styles/          # Global styles & animations
-                └── index.css    # HUD glowing styles, animations & themes
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                                    REACT 19 RENDERER                                   │
+│    (Face Biometric Lock, HUD Desktop Orb, Voice Input, Diagnostic Cards, Chat)       │
+└───────────────────────────────────────────┬────────────────────────────────────────────┘
+                                            │ IPC (window.ev / window.system)
+                                            ▼
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                                 ELECTRON MAIN PROCESS                                  │
+│                                                                                        │
+│   ┌────────────────────────┐  ┌────────────────────────┐  ┌─────────────────────────┐   │
+│   │   Audio Transcriber    │  │    Hardware Vitals     │  │    Intent Classifier    │   │
+│   │   (Whisper STT API)    │  │  (systeminformation)   │  │    (Fast Hardware Path) │   │
+│   └────────────────────────┘  └────────────────────────┘  └────────────┬────────────┘   │
+│                                                                        │               │
+│                                                                        ▼               │
+│                                                          ┌───────────────────────────┐ │
+│                                                          │  Autonomous Agent Loop    │ │
+│                                                          │  (src/main/ai/agent.js)   │ │
+│                                                          └─────────────┬─────────────┘ │
+└────────────────────────────────────────────────────────────────────────│───────────────┘
+                                                                         │
+                                       ┌─────────────────────────────────┴─────────────────────────────────┐
+                                       │                                                                   │
+                                       ▼                                                                   ▼
+┌─────────────────────────────────────────────────────────────┐   ┌─────────────────────────────────────────────────────────────┐
+│                    MCP MANAGER CLIENT                       │   │                   LLM PROVIDER ROUTER                       │
+│                 (src/main/mcp/mcpManager.js)                │   │                   (src/main/ai/llm.js)                      │
+│                                                             │   │                                                             │
+│  Spawns & connects stdio MCP servers from mcp_config.json:  │   │  1. Primary: Groq API (qwen/qwen3.8-27b) ~500ms           │
+│  - System Server       (CPU, RAM, Battery)                  │   │  2. Fallback: NVIDIA Nemotron NIM API                      │
+│  - Applications Server (App Launcher/Closer)               │   │  3. Strict 7s Request Timeouts & Auto Failover             │
+│  - Filesystem Server   (Read, Write, Search)                │   └─────────────────────────────────────────────────────────────┘
+│  - Terminal Server     (Shell Commands)                     │
+│  - Browser Server      (Smart URL & Platform Resolver)      │
+└─────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## ⚙️ Prerequisites & System Requirements
+## ⚙️ Prerequisites & Environment Setup
 
-Before setting up the project, ensure your workstation meets the following requirements:
+Before running or building the project, ensure your environment meets the following requirements:
 
-1. **Node.js**: `v18.0.0` or higher (`v20.x` LTS or `v22.x` recommended).
-   - Check version:
-     ```bash
-     node -v
-     ```
-2. **NPM**: `v9.0.0` or higher (bundled with Node.js).
-   - Check version:
-     ```bash
-     npm -v
-     ```
-3. **C++ Build Tools (Required for compiling `better-sqlite3`)**:
-   - **Windows**: Install Visual Studio C++ Build Tools or run PowerShell as Administrator:
+1. **Node.js**: `v18.0.0` or higher (`v20.x` LTS recommended).
+   ```bash
+   node -v
+   ```
+2. **NPM**: `v9.0.0` or higher.
+   ```bash
+   npm -v
+   ```
+3. **C++ Build Tools** (Required for compiling `better-sqlite3` native C++ bindings):
+   - **Windows**: Run PowerShell as Administrator:
      ```powershell
      npm install --global --production windows-build-tools
      ```
+     *Or install Visual Studio C++ Build Tools.*
    - **macOS**: Install Xcode Command Line Tools:
      ```bash
      xcode-select --install
      ```
-   - **Linux (Ubuntu/Debian)**: Install standard compilation tools:
+   - **Linux (Ubuntu/Debian)**:
      ```bash
      sudo apt-get update
      sudo apt-get install -y build-essential python3
      ```
-4. **Ollama (Optional - for local LLM inference)**:
-   - Download & install from [ollama.com](https://ollama.com).
 
 ---
 
-## 🚀 Quick Start / Setup Guide
+## 🚀 Step-by-Step Installation Guide
 
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/<your-username>/EV.git
-cd EV
+git clone https://github.com/RiturajPaull/AI-Assistant.git
+cd AI-Assistant
 ```
 
-### 2. Install All Dependencies
+### 2. Install Project Dependencies
 
-Run `npm install` to download and install all production and development packages:
+Run `npm install` to download all required packages:
 
 ```bash
 npm install
 ```
 
-> **Note**: The `postinstall` script (`electron-builder install-app-deps`) runs automatically to rebuild native C++ modules (such as `better-sqlite3`) against Electron's Node headers.
+> **Note**: The `postinstall` script (`electron-builder install-app-deps`) will execute automatically to compile `better-sqlite3` against Electron's Node headers.
 
-### 3. Rebuild Native Modules (If Needed Manually)
+### 3. Configure Environment Variables (`.env`)
 
-If you encounter native binary mismatch errors during startup, run:
+Create a `.env` file in the root directory (or copy `.env.example`):
 
 ```bash
-npm run postinstall
+cp .env.example .env
 ```
 
-### 4. Start in Development Mode
+Add your API keys to `.env` (see the [Environment Variables](#-environment-variables-configuration-env) section below).
 
-Launch the app with hot module reloading (HMR) for both Electron and React:
+### 4. Start Development Server
+
+Launch EV in development mode with Hot Module Replacement (HMR):
 
 ```bash
 npm run dev
 ```
 
-The frameless floating HUD window will appear on your desktop with DevTools opened in a detached window.
+The Cyberpunk HUD floating interface will launch on your desktop.
 
 ---
 
-## 📦 Detailed Package Breakdown & Installation
+## 🔑 Environment Variables Configuration (`.env`)
 
-If you are recreating the project from scratch or installing packages individually, here is the complete breakdown of every package, its purpose, and the exact install commands:
+Configure your API keys in the `.env` file located at the project root:
+
+```env
+# NVIDIA Nemotron NIM Endpoint Configuration
+NVIDIA_API_KEY=your_nvidia_api_key_here
+NVIDIA_MODEL=nvidia/nemotron-3.5-lightning-30b-a3b
+
+# Groq Sub-Second LLM API Configuration (Recommended for ~500ms responses)
+GROQ_API_KEY=your_groq_api_key_here
+GROQ_MODEL=qwen/qwen3.8-27b
+```
+
+---
+
+## 🔌 Model Context Protocol (MCP) Tool Servers
+
+EV uses standalone MCP server scripts located in `src/main/mcp/servers/`, managed by `mcp_config.json`:
+
+| MCP Server | Script File | Registered Tools | Description |
+| :--- | :--- | :--- | :--- |
+| **System** | `systemServer.mjs` | `get_system_stats`, `get_cpu_stats`, `get_memory_stats`, `get_battery_stats`, `get_process_list` | Fetches hardware diagnostics & system metrics. |
+| **Applications**| `appServer.mjs` | `open_application`, `close_application` | Launches or terminates local desktop applications. |
+| **Filesystem** | `filesystemServer.mjs` | `read_file`, `write_file`, `search_files` | Performs local file operations & searches. |
+| **Terminal** | `terminalServer.mjs` | `execute_command` | Executes safe terminal/shell commands. |
+| **Browser** | `browserServer.mjs` | `open_browser_url` | Smart search URL resolver for YouTube, Google, GitHub, Reddit, & Wikipedia. |
+
+---
+
+## 📂 Complete Project Directory Structure
+
+```
+EV/
+├── .env                         # Local environment configuration & API keys
+├── .env.example                 # Example environment template
+├── .gitattributes               # Binary model file line-ending rules
+├── .gitignore                   # Git ignore policies
+├── electron-builder.yml         # Application packaging configuration
+├── electron.vite.config.mjs     # Electron-Vite multi-target build settings
+├── mcp_config.json              # MCP standalone tool servers registry
+├── package.json                 # Project manifest & NPM scripts
+├── resources/                   # Application icons & static branding
+└── src/                         # Core Source Code
+    ├── main/                    # Electron Main Process (Node.js Backend)
+    │   ├── ai/                  # LLM & AI Pipelines (agent.js, llm.js, stt.js)
+    │   ├── brain/               # Prompt & Intent Engine
+    │   ├── database/            # SQLite Storage Layer (better-sqlite3)
+    │   ├── mcp/                 # Model Context Protocol Client & Servers
+    │   └── system/              # Hardware Diagnostics (CPU, RAM, GPU, Battery)
+    ├── preload/                 # Preload Scripts (Secure IPC Bridge)
+    └── renderer/                # React 19 Frontend (Cyberpunk HUD User Interface)
+        ├── index.html           # Meta CSP & HTML Root
+        ├── public/              # Static Assets & Offline FaceAPI Models
+        │   └── models/          # .bin & manifest files for TinyFaceDetector, LandMarks, & Recognition
+        └── src/
+            ├── App.jsx          # Main HUD Window, Core Reticle & Speech UI
+            ├── components/      # UI components, response cards & Auth Overlays
+            │   └── auth/
+            │       └── FaceAuthOverlay.jsx # Sci-Fi Biometric Face Authentication Card
+            ├── utils/           # Helper utilities
+            │   ├── faceAuth.js  # FaceAPI Model Loader, Vector Extractor & LocalStorage Profile Manager
+            │   └── tts.js       # Text-to-Speech Vocal Synthesis Engine
+            └── styles/          # Tailwind CSS v4 & Cyberpunk HUD Styling
+```
+
+---
+
+## 📦 Package & Dependency Breakdown
 
 ### Production Dependencies (`dependencies`)
 
-These runtime packages are bundled into the final application build:
-
-| Package                         | Version   | Purpose & Usage in EV                                                                       |
-| :------------------------------ | :-------- | :------------------------------------------------------------------------------------------ |
-| **`@electron-toolkit/preload`** | `^3.0.2`  | Context bridge helpers to expose safe APIs from preload scripts to the renderer.            |
-| **`@electron-toolkit/utils`**   | `^4.0.0`  | Utilities for window shortcut management, platform checks, and app lifecycle.               |
-| **`@tailwindcss/vite`**         | `^4.3.3`  | Vite plugin integration for Tailwind CSS v4.                                                |
-| **`tailwindcss`**               | `^4.3.3`  | Next-generation utility-first styling engine used for HUD and dashboard design.             |
-| **`better-sqlite3`**            | `^13.0.3` | Fastest synchronous SQLite3 client for local chat history, state persistence, and settings. |
-| **`framer-motion`**             | `^13.1.1` | Production-ready motion and gesture library for floating card animations and HUD effects.   |
-| **`lucide-react`**              | `^1.34.0` | Clean, customizable icon set for hardware status, navigation, and controls.                 |
-| **`ollama`**                    | `^0.6.3`  | Official JavaScript client for interacting with local Ollama LLMs (e.g., Llama 3, Mistral). |
-| **`systeminformation`**         | `^5.33.2` | System hardware profiling library (CPU load, RAM usage, battery levels, processes, GPU).    |
-
-#### 📥 Single Command to Install All Production Dependencies:
-
-```bash
-npm install @electron-toolkit/preload @electron-toolkit/utils @tailwindcss/vite tailwindcss better-sqlite3 framer-motion lucide-react ollama systeminformation
-```
-
----
-
-### Development Dependencies (`devDependencies`)
-
-These tools are only used during development, linting, formatting, and packaging:
-
-| Package                                        | Version    | Purpose                                                                                        |
-| :--------------------------------------------- | :--------- | :--------------------------------------------------------------------------------------------- |
-| **`electron`**                                 | `^43.4.1`  | The cross-platform desktop application framework.                                              |
-| **`electron-vite`**                            | `^5.0.0`   | Next-generation build tool and dev server tailored for Electron + Vite.                        |
-| **`vite`**                                     | `^7.2.6`   | Frontend bundler offering instantaneous HMR for the React UI.                                  |
-| **`react`**                                    | `^19.2.1`  | Core React 19 UI component library.                                                            |
-| **`react-dom`**                                | `^19.2.1`  | React DOM renderer for desktop web views.                                                      |
-| **`@vitejs/plugin-react`**                     | `^5.1.1`   | Fast Refresh and JSX transformation plugin for Vite.                                           |
-| **`electron-builder`**                         | `^26.0.12` | Complete packaging solution for generating `.exe`, `.dmg`, `.AppImage`, and `.deb` installers. |
-| **`eslint`**                                   | `^9.39.1`  | Pluggable JavaScript linter.                                                                   |
-| **`eslint-plugin-react`**                      | `^7.37.5`  | React specific linting rules.                                                                  |
-| **`eslint-plugin-react-hooks`**                | `^7.0.1`   | ESLint rules for React Hooks correctness.                                                      |
-| **`eslint-plugin-react-refresh`**              | `^0.4.24`  | Validates components for hot module reloading.                                                 |
-| **`@electron-toolkit/eslint-config`**          | `^2.1.0`   | Standard ESLint shareable configurations for Electron.                                         |
-| **`@electron-toolkit/eslint-config-prettier`** | `^3.0.0`   | Turns off conflicting ESLint formatting rules with Prettier.                                   |
-| **`prettier`**                                 | `^3.7.4`   | Automated code formatting engine.                                                              |
-
-#### 📥 Single Command to Install All Development Dependencies:
-
-```bash
-npm install -D electron electron-vite vite react react-dom @vitejs/plugin-react electron-builder eslint eslint-plugin-react eslint-plugin-react-hooks eslint-plugin-react-refresh @electron-toolkit/eslint-config @electron-toolkit/eslint-config-prettier prettier
-```
+| Package | Version | Purpose |
+| :--- | :--- | :--- |
+| **`@vladmandic/face-api`** | `^1.7.15` | Neural network models for face detection, landmark matrix & recognition. |
+| **`@modelcontextprotocol/sdk`** | `^1.30.0` | Official MCP SDK for stdio server/client communication. |
+| **`openai`** | `^7.8.0` | Official OpenAI client used for Groq, NVIDIA NIM, & Whisper STT. |
+| **`better-sqlite3`** | `^13.0.3` | Ultra-fast synchronous SQLite database for local history. |
+| **`systeminformation`** | `^5.33.2` | System hardware profiling (CPU, RAM, GPU, Battery). |
+| **`framer-motion`** | `^13.1.1` | Fluid animations for HUD cards and desktop widgets. |
+| **`tailwindcss`** | `^4.3.3` | Utility-first CSS framework. |
+| **`lucide-react`** | `^1.34.0` | High-tech UI icon suite. |
 
 ---
 
 ## 🛠 Available NPM Scripts
 
-| Command                | Description                                                                                  |
-| :--------------------- | :------------------------------------------------------------------------------------------- |
-| `npm run dev`          | Starts the Electron app in development mode with HMR for main, preload, and renderer.        |
-| `npm run build`        | Builds and compiles all three targets (main, preload, renderer) into `./out`.                |
-| `npm run start`        | Previews the compiled production build locally.                                              |
-| `npm run postinstall`  | Rebuilds native Node.js addons (`better-sqlite3`) for the current Electron version.          |
-| `npm run build:win`    | Builds the app and generates a Windows NSIS installer (`.exe`).                              |
-| `npm run build:mac`    | Builds the app and generates macOS package (`.dmg`).                                         |
-| `npm run build:linux`  | Builds the app for Linux (`.AppImage`, `.deb`, `.snap`).                                     |
-| `npm run build:unpack` | Builds into an unpacked directory for fast executable testing without creating an installer. |
-| `npm run lint`         | Runs ESLint across all source files to find syntax or style issues.                          |
-| `npm run format`       | Runs Prettier to auto-format all code in the workspace.                                      |
+| Command | Description |
+| :--- | :--- |
+| `npm run dev` | Starts EV in development mode with HMR for Main, Preload, and Renderer. |
+| `npm run build` | Compiles all targets into `./out`. |
+| `npm run build:win` | Builds a standalone Windows installer (`.exe`). |
+| `npm run build:mac` | Builds a macOS package (`.dmg`). |
+| `npm run build:linux` | Builds a Linux package (`.AppImage`, `.deb`). |
+| `npm run postinstall` | Rebuilds native binaries (`better-sqlite3`) for Electron. |
 
 ---
 
-## 🔌 IPC & System Integration
+## ⚡ Real-Time Hardware Diagnostics
 
-The application uses Electron's `contextBridge` to expose a secure API surface to the renderer window:
+EV provides instant real-time telemetry for desktop hardware:
 
-### Available APIs in Renderer (`window.ev` & `window.system`):
+- **🖥️ CPU**: Core count, clock speed, model, real-time load %.
+- **💾 Memory**: Active, free, and total system RAM.
+- **🔋 Battery**: Charge percentage, charging state, remaining runtime.
+- **⚙️ Processes**: Top running processes ordered by CPU/RAM consumption.
 
-```javascript
-// Check backend status
-const status = await window.ev.getStatus()
+---
 
-// Send natural language or system command
-const result = await window.ev.command('show me cpu usage')
+## 🎙 Voice Input, TTS & Whisper Speech-to-Text
 
-// Hardware diagnostics
-const cpu = await window.ev.system.getCPU()
-const fullStats = await window.ev.system.getStats()
+EV includes full voice input & vocal feedback capabilities:
 
-// Window Controls
-window.windowControls.minimize()
-window.windowControls.maximize()
-window.windowControls.close()
+1. Click the glowing microphone icon on the HUD UI (or hold the speech button).
+2. Audio is captured via Web MediaRecorder API in webm/wav format.
+3. Transmitted securely via IPC (`ev:transcribe`) to `transcribeAudio()` in `src/main/ai/stt.js`.
+4. Transcribed into text via Whisper STT and automatically executed through the Autonomous Agent loop.
+5. EV responds vocally using the built-in TTS engine tuned with Karen-profile acoustics.
+
+---
+
+## 🧰 Native Module Compilation (`better-sqlite3`)
+
+If you encounter `NODE_MODULE_VERSION` mismatch errors when launching the app:
+
+```bash
+npm run postinstall
 ```
-
----
-
-## 🧠 Brain & Intent Engine
-
-The intent engine (`src/main/brain/intent.js`) inspects user prompts and categorizes them into actionable operations:
-
-| Recognized Keywords  | Detected Intent | Triggered Action                                |
-| :------------------- | :-------------- | :---------------------------------------------- |
-| `cpu`, `processor`   | `get_cpu`       | Reads CPU load, model, speed, and cores         |
-| `ram`, `memory`      | `get_memory`    | Computes active, free, and total system RAM     |
-| `battery`, `charge`  | `get_battery`   | Queries battery level and charging state        |
-| `process`, `running` | `get_processes` | Fetches active running tasks & memory consumers |
-| _Other text_         | `unknown`       | Forwards prompt to local AI / LLM pipeline      |
-
----
-
-## 🧰 Native Module Compilation (better-sqlite3)
-
-Because `better-sqlite3` uses native C++ bindings, its binary must match the exact ABI of Electron's internal Node engine (not just your global Node.js version).
-
-1. **Automatic rebuild during install**:
-   The `postinstall` script in `package.json` handles this:
-   ```json
-   "postinstall": "electron-builder install-app-deps"
-   ```
-2. **If you encounter `NODE_MODULE_VERSION` mismatch**:
-   ```bash
-   npx @electron/rebuild -f -w better-sqlite3
-   ```
-
----
-
-## 🤖 Optional: Setting up Ollama for Local AI
-
-To enable on-device AI responses:
-
-1. Download and install **Ollama** from [ollama.com](https://ollama.com).
-2. Pull your preferred model (e.g. Llama 3 or Mistral):
-   ```bash
-   ollama pull llama3
-   # or
-   ollama pull mistral
-   ```
-3. Ensure the Ollama service is running on `http://localhost:11434`.
-4. EV's `src/main/ai/ollama.js` module will automatically communicate with the local instance.
-
----
-
-## 🔧 Recommended IDE & Extensions
-
-For the best developer experience, use **VS Code** with the following extensions:
-
-- [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) (`dbaeumer.vscode-eslint`)
-- [Prettier - Code Formatter](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) (`esbenp.prettier-vscode`)
-- [Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss) (`bradlc.vscode-tailwindcss`)
+or
+```bash
+npx @electron/rebuild -f -w better-sqlite3
+```
 
 ---
 
 ## ❓ Troubleshooting & FAQ
 
 <details>
-<summary><b>1. Error: The module '...better_sqlite3.node' was compiled against a different Node.js version</b></summary>
+<summary><b>1. EV responses are taking too long</b></summary>
 
-Run the following command in your terminal to recompile against Electron's Node headers:
-
-```bash
-npx electron-builder install-app-deps
-```
-
-or
-
-```bash
-npx @electron/rebuild -f -w better-sqlite3
-```
-
+Ensure you have configured a valid `GROQ_API_KEY` in your `.env` file. Groq responds in **~500ms**, whereas NVIDIA free endpoints may occasionally queue requests.
 </details>
 
 <details>
-<summary><b>2. The window is transparent or black screen on Linux</b></summary>
+<summary><b>2. Face recognition models fail to load locally</b></summary>
 
-Some Linux window managers require specific compositor settings or disabling GPU hardware acceleration flags:
-
-```bash
-npm run dev -- --no-sandbox --disable-gpu
-```
-
+Ensure the `.bin` and manifest files exist inside `src/renderer/public/models/`. The system will automatically fall back to jsDelivr CDN if local files are missing.
 </details>
 
 <details>
-<summary><b>3. Ollama connection refused (`ECONNREFUSED 127.0.0.1:11434`)</b></summary>
+<summary><b>3. Camera permission error on Windows</b></summary>
 
-Ensure Ollama is started:
-
-```bash
-ollama serve
-```
-
+If you receive `NotAllowedError: Permission denied by system`, open **Windows Settings > Privacy & security > Camera** and ensure **"Let desktop apps access your camera"** is toggled **ON**.
 </details>
 
 ---

@@ -1,0 +1,3 @@
+# Treat model binary files as raw binary
+*.bin binary
+*shard* binary

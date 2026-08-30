@@ -11,6 +11,11 @@ import { transcribeAudio } from './ai/stt.js'
 app.commandLine.appendSwitch('enable-features', 'SpeechRecognition,MediaSession')
 app.commandLine.appendSwitch('enable-speech-dispatcher')
 
+// Suppress verbose Electron security warnings during development
+if (is.dev) {
+  process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
+}
+
 function createWindow() {
   const mainWindow = new BrowserWindow({
     width: 500,
@@ -23,6 +28,8 @@ function createWindow() {
     frame: false,
     hasShadow: true,
     backgroundColor: '#00000000',
+    ...(process.platform === 'win32' ? { backgroundMaterial: 'acrylic' } : {}),
+    ...(process.platform === 'darwin' ? { vibrancy: 'hud' } : {}),
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),

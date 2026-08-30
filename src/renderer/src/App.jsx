@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import './styles/index.css'
 import ResponseRenderer from './components/responses/ResponseRenderer'
+import FaceAuthOverlay from './components/auth/FaceAuthOverlay'
 import useVoiceRecorder from './hooks/useVoiceRecorder'
 import speak, {
   getAvailableVoices,
@@ -8,7 +9,7 @@ import speak, {
   stopSpeech,
   subscribeSpeechState
 } from './utils/tts'
-import { Mic, MicOff, Loader2, Square } from 'lucide-react'
+import { Mic, MicOff, Loader2, Square, Lock } from 'lucide-react'
 
 function App() {
   const [response, setResponse] = useState(null)
@@ -16,6 +17,7 @@ function App() {
   const [systemVoices, setSystemVoices] = useState([])
   const [activeVoiceName, setActiveVoiceName] = useState('')
   const [isSpeaking, setIsSpeaking] = useState(false)
+  const [isAuthPassed, setIsAuthPassed] = useState(false)
 
   useEffect(() => {
     const unsubscribe = subscribeSpeechState((speakingState) => {
@@ -235,7 +237,30 @@ function App() {
 
   return (
     <div className="ev-container">
+      {/* Sci-Fi Background Grid Layer */}
+      <div className="ev-hud-grid"></div>
+
+      {/* Top Sci-Fi App Header Bar */}
+      <div className="ev-app-header">
+        <div className="hud-brand-tag">
+          <span className="brand-dot"></span>
+          <span>E.V INTELLIGENCE OS</span>
+        </div>
+        <div className="hud-sys-tag">
+          <span className="hud-dot"></span>
+          <span>SYS // ONLINE</span>
+        </div>
+      </div>
+
+      {!isAuthPassed && (
+        <FaceAuthOverlay
+          onAuthSuccess={() => setIsAuthPassed(true)}
+          onAuthFailure={() => setIsAuthPassed(false)}
+        />
+      )}
+
       <div className="ev-core">
+        <div className="ev-core-reticle"></div>
         <div
           className={`ev-ring ${isRecording ? 'listening-ring' : ''} ${isTranscribing ? 'thinking-ring' : ''}`}
         >
@@ -307,6 +332,15 @@ function App() {
         </button>
         <button type="button" onClick={showProcesses}>
           PROCESSES
+        </button>
+        <button
+          type="button"
+          className="lock-btn"
+          onClick={() => setIsAuthPassed(false)}
+          title="Lock EV & Require Face Scan"
+        >
+          <Lock size={10} style={{ display: 'inline', marginRight: 3 }} />
+          LOCK
         </button>
 
         <div className="voice-test-group">

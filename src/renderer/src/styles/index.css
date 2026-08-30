@@ -10,12 +10,13 @@ body,
 body {
   background: transparent;
   overflow: hidden;
-  font-family: Arial, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
 .ev-container {
   width: 100%;
   height: 100%;
+  box-sizing: border-box;
 
   display: flex;
   flex-direction: column;
@@ -25,14 +26,106 @@ body {
   position: relative;
 
   color: white;
+
+  /* Futuristic Cyberpunk Dark HUD Background */
+  background: radial-gradient(circle at 50% 25%, rgba(22, 28, 48, 0.95) 0%, rgba(10, 14, 26, 0.98) 65%, rgba(4, 6, 12, 0.99) 100%);
+  backdrop-filter: blur(25px) saturate(180%);
+  -webkit-backdrop-filter: blur(25px) saturate(180%);
+
+  border: 1.5px solid rgba(255, 157, 0, 0.5);
+  border-radius: 24px;
+
+  box-shadow:
+    0 25px 60px rgba(0, 0, 0, 0.9),
+    0 0 35px rgba(255, 157, 0, 0.25),
+    inset 0 0 25px rgba(255, 157, 0, 0.06);
+  overflow: hidden;
+}
+
+/* Background Cyber Grid Layer */
+.ev-hud-grid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image:
+    linear-gradient(rgba(255, 157, 0, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 157, 0, 0.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* App Header HUD Bar */
+.ev-app-header {
+  position: absolute;
+  top: 14px;
+  width: calc(100% - 32px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4px 8px 4px;
+  border-bottom: 1px solid rgba(255, 157, 0, 0.25);
+  z-index: 5;
+}
+
+.hud-brand-tag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #ffaa00;
+  font-family: monospace;
+  text-shadow: 0 0 8px rgba(255, 170, 0, 0.5);
+}
+
+.brand-dot {
+  width: 6px;
+  height: 6px;
+  background: #ffaa00;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #ffaa00;
+}
+
+.hud-sys-tag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #00f3ff;
+  font-family: monospace;
+}
+
+.hud-dot {
+  width: 6px;
+  height: 6px;
+  background: #00f3ff;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #00f3ff;
+  animation: pulseDot 1.5s infinite alternate;
 }
 
 .ev-core {
   position: relative;
-
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 5;
+}
+
+.ev-core-reticle {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 1px dashed rgba(255, 157, 0, 0.35);
+  animation: rotateReticle 16s linear infinite;
+  pointer-events: none;
 }
 
 .ev-ring {
@@ -522,3 +615,510 @@ body {
     transform: translateY(0);
   }
 }
+
+/* Face Recognition Biometric Auth Overlay - Sci-Fi Cyberpunk HUD */
+.face-auth-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(4, 6, 12, 0.94);
+  backdrop-filter: blur(25px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  box-sizing: border-box;
+  animation: cardIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+.face-scanner-card {
+  width: 360px;
+  max-width: 95vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 22px 20px;
+  background: radial-gradient(circle at top, rgba(26, 32, 54, 0.9), rgba(10, 14, 26, 0.95));
+  border: 1px solid rgba(255, 157, 0, 0.45);
+  border-radius: 18px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), 0 0 30px rgba(255, 157, 0, 0.25);
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.face-scanner-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 157, 0, 0.05) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.face-scanner-card.granted {
+  border-color: rgba(0, 255, 157, 0.8);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), 0 0 40px rgba(0, 255, 157, 0.4);
+}
+
+.face-scanner-card.denied {
+  border-color: rgba(255, 0, 85, 0.85);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), 0 0 40px rgba(255, 0, 85, 0.4);
+}
+
+/* Top Telemetry Header */
+.hud-top-bar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 157, 0, 0.2);
+}
+
+.hud-status-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hud-icon {
+  color: #ff9d00;
+}
+.hud-icon.granted { color: #00ff9d; }
+.hud-icon.denied { color: #ff0055; }
+
+.hud-badge-title {
+  font-size: 11px;
+  letter-spacing: 2px;
+  font-weight: 800;
+  color: #ffaa00;
+  text-shadow: 0 0 8px rgba(255, 170, 0, 0.5);
+}
+
+.hud-sys-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+  color: rgba(0, 243, 255, 0.85);
+  font-family: monospace;
+}
+
+.hud-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00f3ff;
+  box-shadow: 0 0 8px #00f3ff;
+  animation: pulseDot 1.5s infinite alternate;
+}
+
+@keyframes pulseDot {
+  0% { opacity: 0.4; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1.2); }
+}
+
+/* Camera HUD Viewport Container */
+.camera-hud-container {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+/* Frame Tag Badge Attached to Top */
+.hud-frame-tag {
+  position: absolute;
+  top: -12px;
+  background: #121828;
+  border: 1px solid #ff9d00;
+  color: #ffaa00;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  padding: 2px 10px;
+  border-radius: 4px;
+  z-index: 10;
+  box-shadow: 0 0 10px rgba(255, 157, 0, 0.4);
+  font-family: monospace;
+}
+
+.hud-frame-tag.granted {
+  border-color: #00ff9d;
+  color: #00ff9d;
+  box-shadow: 0 0 14px rgba(0, 255, 157, 0.6);
+  background: rgba(0, 30, 20, 0.95);
+}
+
+.hud-frame-tag.denied {
+  border-color: #ff0055;
+  color: #ff0055;
+  box-shadow: 0 0 14px rgba(255, 0, 85, 0.6);
+  background: rgba(30, 0, 10, 0.95);
+}
+
+/* Rotating Sci-Fi Reticle Rings */
+.hud-reticle-ring {
+  position: absolute;
+  width: 194px;
+  height: 194px;
+  border-radius: 50%;
+  border: 1px dashed rgba(255, 157, 0, 0.4);
+  animation: rotateReticle 16s linear infinite;
+  pointer-events: none;
+}
+
+.hud-reticle-ring.inner {
+  width: 168px;
+  height: 168px;
+  border: 1px dotted rgba(0, 243, 255, 0.3);
+  animation: rotateReticle 10s linear infinite reverse;
+}
+
+@keyframes rotateReticle {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.camera-view-viewport {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1.5px solid rgba(255, 157, 0, 0.6);
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 157, 0, 0.25);
+  background: #000;
+}
+
+.webcam-feed {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1);
+}
+
+.hud-target-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Sci-Fi Target Bracket Corners */
+.target-bracket {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-color: #ffaa00;
+  border-style: solid;
+  filter: drop-shadow(0 0 4px #ffaa00);
+}
+
+.target-bracket.tl { top: 8px; left: 8px; border-width: 2.5px 0 0 2.5px; }
+.target-bracket.tr { top: 8px; right: 8px; border-width: 2.5px 2.5px 0 0; }
+.target-bracket.bl { bottom: 8px; left: 8px; border-width: 0 0 2.5px 2.5px; }
+.target-bracket.br { bottom: 8px; right: 8px; border-width: 0 2.5px 2.5px 0; }
+
+.target-crosshair {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 16px;
+  height: 16px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+.target-crosshair::before,
+.target-crosshair::after {
+  content: '';
+  position: absolute;
+  background: #ffaa00;
+}
+
+.target-crosshair::before {
+  top: 7px; left: 0; width: 16px; height: 2px;
+}
+
+.target-crosshair::after {
+  top: 0; left: 7px; width: 2px; height: 16px;
+}
+
+/* Horizontal Laser Sweep */
+.scan-laser {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, transparent 0%, #ffaa00 50%, transparent 100%);
+  box-shadow: 0 0 12px #ffaa00;
+  animation: scanLaser 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes scanLaser {
+  0% { top: 5%; opacity: 0.3; }
+  50% { opacity: 1; }
+  100% { top: 92%; opacity: 0.3; }
+}
+
+/* Sci-Fi Progress Bar Loader Panel */
+.hud-loader-panel {
+  width: 100%;
+  margin-bottom: 14px;
+}
+
+.hud-loader-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.hud-loader-title {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #ffaa00;
+  font-family: monospace;
+}
+
+.hud-loader-percent {
+  font-size: 11px;
+  font-weight: 900;
+  color: #00f3ff;
+  font-family: monospace;
+  text-shadow: 0 0 6px rgba(0, 243, 255, 0.6);
+}
+
+/* Segmented Track */
+.hud-progress-track {
+  position: relative;
+  width: 100%;
+  height: 10px;
+  background: rgba(14, 20, 36, 0.9);
+  border: 1px solid rgba(255, 157, 0, 0.3);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.hud-progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: linear-gradient(90deg, #ff7700, #ffaa00);
+  box-shadow: 0 0 10px #ffaa00;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hud-progress-fill.granted {
+  background: linear-gradient(90deg, #00b36b, #00ff9d);
+  box-shadow: 0 0 12px #00ff9d;
+}
+
+.hud-progress-fill.denied {
+  background: linear-gradient(90deg, #b3003b, #ff0055);
+  box-shadow: 0 0 12px #ff0055;
+}
+
+.progress-glow-head {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  background: #ffffff;
+  box-shadow: 0 0 8px #ffffff;
+}
+
+.hud-progress-segments {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2px;
+  pointer-events: none;
+}
+
+.hud-seg-tick {
+  width: 2px;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.auth-status-text {
+  font-size: 10px;
+  letter-spacing: 1.2px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  text-align: center;
+  font-family: monospace;
+}
+
+/* Sci-Fi Data Telemetry Grid */
+.hud-telemetry-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-bottom: 16px;
+  padding: 8px;
+  background: rgba(14, 20, 36, 0.6);
+  border: 1px dashed rgba(255, 157, 0, 0.25);
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.telemetry-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.tel-label {
+  font-size: 8px;
+  letter-spacing: 1px;
+  color: rgba(255, 170, 0, 0.65);
+  font-weight: 700;
+  font-family: monospace;
+}
+
+.tel-val {
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: #00f3ff;
+  font-weight: 700;
+  font-family: monospace;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* Action Controls */
+.auth-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+
+.auth-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+  font-family: monospace;
+  text-transform: uppercase;
+}
+
+.enroll-btn {
+  background: rgba(0, 255, 157, 0.15);
+  border: 1px solid rgba(0, 255, 157, 0.7);
+  color: #00ff9d;
+  box-shadow: 0 0 10px rgba(0, 255, 157, 0.2);
+}
+
+.enroll-btn:hover {
+  background: rgba(0, 255, 157, 0.35);
+  box-shadow: 0 0 16px rgba(0, 255, 157, 0.6);
+  color: #ffffff;
+}
+
+.retry-btn {
+  background: rgba(255, 0, 85, 0.15);
+  border: 1px solid rgba(255, 0, 85, 0.7);
+  color: #ff0055;
+  box-shadow: 0 0 10px rgba(255, 0, 85, 0.2);
+}
+
+.retry-btn:hover {
+  background: rgba(255, 0, 85, 0.35);
+  box-shadow: 0 0 16px rgba(255, 0, 85, 0.6);
+  color: #ffffff;
+}
+
+.reset-btn {
+  background: rgba(255, 157, 0, 0.15);
+  border: 1px solid rgba(255, 157, 0, 0.5);
+  color: #ffaa00;
+}
+
+.reset-btn:hover {
+  background: rgba(255, 157, 0, 0.3);
+  box-shadow: 0 0 14px rgba(255, 157, 0, 0.4);
+  color: #ffffff;
+}
+
+/* Owner Name Prompt Form */
+.hud-name-prompt-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+.hud-name-input-wrapper {
+  width: 100%;
+  position: relative;
+}
+
+.hud-name-input {
+  width: 100%;
+  padding: 8px 12px;
+  background: rgba(10, 14, 26, 0.9);
+  border: 1.5px solid rgba(0, 243, 255, 0.6);
+  border-radius: 6px;
+  color: #00f3ff;
+  font-family: monospace;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-align: center;
+  outline: none;
+  box-shadow: 0 0 12px rgba(0, 243, 255, 0.3);
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+
+.hud-name-input:focus {
+  border-color: #00ff9d;
+  box-shadow: 0 0 18px rgba(0, 255, 157, 0.5);
+  color: #ffffff;
+}
+
+.confirm-name-btn {
+  width: 100%;
+}
+
+
