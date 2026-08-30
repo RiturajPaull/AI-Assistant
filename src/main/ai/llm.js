@@ -40,9 +40,17 @@ export function getNemotronModels() {
   const envModel = readEnvKey('NVIDIA_MODEL')
   const candidates = [
     envModel,
-    'mistralai/mistral-nemotron',
-    'nvidia/llama-3.1-nemotron-70b-instruct',
-    'nvidia/nemotron-4-340b-instruct'
+    'nvidia/nemotron-3.5-lightning-30b-a3b',
+    'mistralai/mistral-nemotron'
+  ]
+  return candidates.filter((m, index, self) => m && self.indexOf(m) === index)
+}
+
+export function getGroqModels() {
+  const envModel = readEnvKey('GROQ_MODEL')
+  const candidates = [
+    envModel,
+    'qwen/qwen3.8-27b'
   ]
   return candidates.filter((m, index, self) => m && self.indexOf(m) === index)
 }
@@ -56,21 +64,65 @@ CRITICAL ACTION RULES:
 - Provide a clear, witty 1-2 sentence response after the tool executes.`
 
 /**
- * Sends messages & tool definitions to NVIDIA Nemotron NIM endpoint using official OpenAI SDK.
+ * Sends messages & tool definitions to AI LLM providers (NVIDIA Nemotron / Groq).
  */
 export async function chatWithLLM(messages, tools = null, toolChoice = 'auto') {
+  const groqApiKey = getGroqApiKey()
   const nvidiaApiKey = getNvidiaApiKey()
 
+  // First try Groq if key is present (Groq delivers ultra-fast sub-second ~500ms responses)
+  if (groqApiKey) {
+    const groqClient = new OpenAI({
+      apiKey: groqApiKey,
+      baseURL: 'https://api.groq.com/openai/v1',
+      timeout: 7000
+    })
+
+    const groqModels = getGroqModels()
+    for (const modelName of groqModels) {
+      try {
+        const startTime = Date.now()
+        console.log(`[STEP 3: QUERYING FAST GROQ LLM] -> Model: ${modelName} | Messages: ${messages.length} | Tools: ${tools ? tools.length : 0} | ToolChoice: ${toolChoice}`)
+
+        const groqParams = {
+          model: modelName,
+          messages,
+          temperature: 0.2,
+          max_tokens: 500
+        }
+
+        if (tools && Array.isArray(tools) && tools.length > 0) {
+          groqParams.tools = tools
+          groqParams.tool_choice = toolChoice
+        }
+
+        const completion = await groqClient.chat.completions.create(groqParams)
+        const duration = Date.now() - startTime
+        const choice = completion.choices?.[0]
+
+        if (choice?.message) {
+          console.log(`[STEP 3 SUCCESS] -> Groq (${modelName}) payload received in ${duration}ms.`)
+          return choice.message
+        }
+      } catch (err) {
+        console.warn(`[STEP 3 WARN] -> Groq (${modelName}) request failed: ${err.message}`)
+      }
+    }
+  }
+
+  // Fallback or primary NVIDIA Nemotron API call
   if (nvidiaApiKey) {
     const nvidiaClient = new OpenAI({
       apiKey: nvidiaApiKey,
-      baseURL: 'https://integrate.api.nvidia.com/v1'
+      baseURL: 'https://integrate.api.nvidia.com/v1',
+      timeout: 7000
     })
 
     const modelsToTry = getNemotronModels()
 
     for (const modelName of modelsToTry) {
       try {
+        const startTime = Date.now()
         console.log(`[STEP 3: SENDING TO NVIDIA NEMOTRON LLM] -> Model: ${modelName} | Messages: ${messages.length} | Tools: ${tools ? tools.length : 0} | ToolChoice: ${toolChoice}`)
 
         const params = {
@@ -86,49 +138,16 @@ export async function chatWithLLM(messages, tools = null, toolChoice = 'auto') {
         }
 
         const completion = await nvidiaClient.chat.completions.create(params)
+        const duration = Date.now() - startTime
         const choice = completion.choices?.[0]
 
         if (choice?.message) {
-          console.log(`[STEP 3 SUCCESS] -> NVIDIA Nemotron (${modelName}) payload received successfully.`)
+          console.log(`[STEP 3 SUCCESS] -> NVIDIA Nemotron (${modelName}) payload received in ${duration}ms.`)
           return choice.message
         }
       } catch (err) {
         console.warn(`[STEP 3 WARN] -> NVIDIA Nemotron (${modelName}) request failed: ${err.message}`)
       }
-    }
-  }
-
-  // Fallback to Groq API if NVIDIA key is missing or fails
-  const groqApiKey = getGroqApiKey()
-  if (groqApiKey) {
-    try {
-      console.log('[STEP 3 FALLBACK: QUERYING GROQ API] -> Model: llama-3.1-8b-instant...')
-      const groqClient = new OpenAI({
-        apiKey: groqApiKey,
-        baseURL: 'https://api.groq.com/openai/v1'
-      })
-
-      const groqParams = {
-        model: 'llama-3.1-8b-instant',
-        messages,
-        temperature: 0.2,
-        max_tokens: 500
-      }
-
-      if (tools && Array.isArray(tools) && tools.length > 0) {
-        groqParams.tools = tools
-        groqParams.tool_choice = toolChoice
-      }
-
-      const completion = await groqClient.chat.completions.create(groqParams)
-      const choice = completion.choices?.[0]
-
-      if (choice?.message) {
-        console.log('[STEP 3 SUCCESS] -> Groq API payload received.')
-        return choice.message
-      }
-    } catch (err) {
-      console.warn('[STEP 3 ERROR] -> Groq API fallback error:', err.message)
     }
   }
 
