@@ -33,8 +33,8 @@ export async function runAgent(userPrompt) {
     while (iterations < MAX_TOOL_ITERATIONS) {
       iterations++
 
-      // Force tool execution on Iteration 1 when tools are present
-      const toolChoice = (iterations === 1 && tools && tools.length > 0) ? 'required' : 'auto'
+      // Use 'auto' tool choice so LLM only calls tools when necessary, avoiding redundant round-trips for simple chats
+      const toolChoice = 'auto'
 
       console.log(`\n--- Agent Loop Iteration ${iterations} (tool_choice: ${toolChoice}) ---`)
       const responseMessage = await chatWithLLM(messages, tools, toolChoice)
