@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import './styles/index.css'
 import ResponseRenderer from './components/responses/ResponseRenderer'
 import FaceAuthOverlay from './components/auth/FaceAuthOverlay'
+import SettingsModal from './components/settings/SettingsModal'
 import useVoiceRecorder from './hooks/useVoiceRecorder'
 import speak, {
   getAvailableVoices,
@@ -9,7 +10,7 @@ import speak, {
   stopSpeech,
   subscribeSpeechState
 } from './utils/tts'
-import { Mic, MicOff, Loader2, Square, Lock } from 'lucide-react'
+import { Mic, MicOff, Loader2, Square, Lock, Settings } from 'lucide-react'
 
 function App() {
   const [response, setResponse] = useState(null)
@@ -18,6 +19,32 @@ function App() {
   const [activeVoiceName, setActiveVoiceName] = useState('')
   const [isSpeaking, setIsSpeaking] = useState(false)
   const [isAuthPassed, setIsAuthPassed] = useState(false)
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false)
+  const [userSettings, setUserSettings] = useState(() => {
+    const raw = localStorage.getItem('ev_user_settings')
+    if (raw) {
+      try {
+        return JSON.parse(raw)
+      } catch (e) {
+        console.error('Failed to parse settings:', e)
+      }
+    }
+    return {
+      appearance: {
+        theme: 'cyber-dark',
+        showGrid: true,
+        glowIntensity: 80,
+        transparency: 90
+      }
+    }
+  })
+
+  const currentAppearance = userSettings?.appearance || {
+    theme: 'cyber-dark',
+    showGrid: true,
+    glowIntensity: 80,
+    transparency: 90
+  }
 
   useEffect(() => {
     const unsubscribe = subscribeSpeechState((speakingState) => {
@@ -65,8 +92,11 @@ function App() {
   }
 
   const executeCommand = async (textToRun) => {
-    const trimmed = textToRun || command.trim()
+    const targetText = typeof textToRun === 'string' ? textToRun : command
+    const trimmed = targetText.trim()
     if (!trimmed) return
+
+    setCommand('')
 
     try {
       let result = null
@@ -131,7 +161,6 @@ function App() {
 
   const handleTranscription = (transcribedText) => {
     if (transcribedText) {
-      setCommand(transcribedText)
       executeCommand(transcribedText)
     }
   }
@@ -236,9 +265,14 @@ function App() {
   }
 
   return (
-    <div className="ev-container">
+    <div
+      className={`ev-container theme-${currentAppearance.theme || 'cyber-dark'}`}
+      style={{
+        opacity: (currentAppearance.transparency || 90) / 100
+      }}
+    >
       {/* Sci-Fi Background Grid Layer */}
-      <div className="ev-hud-grid"></div>
+      <div className={`ev-hud-grid ${currentAppearance.showGrid === false ? 'hidden' : ''}`}></div>
 
       {/* Top Sci-Fi App Header Bar */}
       <div className="ev-app-header">
@@ -362,6 +396,28 @@ function App() {
           </select>
         </div>
       </div>
+
+      <button
+        type="button"
+        className="ev-settings-trigger-btn"
+        onClick={() => setIsSettingsOpen(true)}
+        title="Open EV Settings"
+      >
+        <Settings size={18} />
+      </button>
+
+      <SettingsModal
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        systemVoices={systemVoices}
+        activeVoiceName={activeVoiceName}
+        onVoiceChange={handleVoiceSelect}
+        onSettingsChange={(updated) => setUserSettings(updated)}
+        onLockApp={() => {
+          setIsSettingsOpen(false)
+          setIsAuthPassed(false)
+        }}
+      />
     </div>
   )
 }

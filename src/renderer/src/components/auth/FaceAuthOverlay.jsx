@@ -35,8 +35,35 @@ export default function FaceAuthOverlay({ onAuthSuccess, onAuthFailure }) {
       if (activeStreamRef.current) {
         activeStreamRef.current.getTracks().forEach((t) => t.stop())
       }
+
+      const rawSettings = localStorage.getItem('ev_user_settings')
+      let camSettings = {}
+      if (rawSettings) {
+        try {
+          camSettings = JSON.parse(rawSettings).camera || {}
+        } catch (e) {
+          console.error(e)
+        }
+      }
+
+      const resMap = {
+        '480p': { width: 640, height: 480 },
+        '720p': { width: 1280, height: 720 },
+        '1080p': { width: 1920, height: 1080 }
+      }
+      const selectedRes = resMap[camSettings.resolution] || { width: 640, height: 480 }
+
+      const videoConstraints = {
+        width: selectedRes.width,
+        height: selectedRes.height,
+        facingMode: 'user'
+      }
+      if (camSettings.deviceId && camSettings.deviceId !== 'default') {
+        videoConstraints.deviceId = { exact: camSettings.deviceId }
+      }
+
       const mediaStream = await navigator.mediaDevices.getUserMedia({
-        video: { width: 320, height: 240, facingMode: 'user' }
+        video: videoConstraints
       })
       activeStreamRef.current = mediaStream
       setStream(mediaStream)
@@ -64,6 +91,19 @@ export default function FaceAuthOverlay({ onAuthSuccess, onAuthFailure }) {
     let isMounted = true
 
     async function initAuth() {
+      const rawSettings = localStorage.getItem('ev_user_settings')
+      if (rawSettings) {
+        try {
+          const parsed = JSON.parse(rawSettings)
+          if (parsed.auth?.faceAuthEnabled === false) {
+            if (onAuthSuccess) onAuthSuccess()
+            return
+          }
+        } catch (e) {
+          console.error(e)
+        }
+      }
+
       setScanProgress(25)
       const stored = getStoredAuthorizedDescriptor()
       const name = getStoredOwnerName()
@@ -119,6 +159,19 @@ export default function FaceAuthOverlay({ onAuthSuccess, onAuthFailure }) {
     let attempts = 0
     const maxAttempts = 15 // Scan for up to ~7.5 seconds
 
+    const rawSettings = localStorage.getItem('ev_user_settings')
+    let threshold = 0.48
+    if (rawSettings) {
+      try {
+        const parsed = JSON.parse(rawSettings)
+        if (parsed.auth?.strictMatchThreshold) {
+          threshold = parsed.auth.strictMatchThreshold
+        }
+      } catch (e) {
+        console.error(e)
+      }
+    }
+
     scanIntervalRef.current = setInterval(async () => {
       attempts++
       if (!videoRef.current) return
@@ -137,7 +190,7 @@ export default function FaceAuthOverlay({ onAuthSuccess, onAuthFailure }) {
       }
 
       setLandmarksCount(68) // 68-point facial landmark matrix
-      const result = verifyFaceDescriptor(liveDescriptor, storedDescriptor)
+      const result = verifyFaceDescriptor(liveDescriptor, storedDescriptor, threshold)
       setMatchDistance(result.distance)
 
       if (result.isMatch) {

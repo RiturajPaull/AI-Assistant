@@ -92,6 +92,21 @@ export function speak(text, options = {}) {
   if (!text || typeof text !== 'string') return
 
   try {
+    const rawSettings = localStorage.getItem('ev_user_settings')
+    let voiceSettings = {}
+    if (rawSettings) {
+      try {
+        const parsed = JSON.parse(rawSettings)
+        voiceSettings = parsed.voice || {}
+      } catch (e) {
+        console.error(e)
+      }
+    }
+
+    if (voiceSettings.ttsEnabled === false && !options.force) {
+      return
+    }
+
     stopSpeech()
 
     const cleanText = text
@@ -101,9 +116,9 @@ export function speak(text, options = {}) {
 
     const utterance = new SpeechSynthesisUtterance(cleanText)
 
-    utterance.rate = options.rate || 1.1
-    utterance.pitch = options.pitch || 1.22
-    utterance.volume = options.volume || 1.0
+    utterance.rate = options.rate || voiceSettings.speechRate || 1.1
+    utterance.pitch = options.pitch || voiceSettings.speechPitch || 1.2
+    utterance.volume = options.volume !== undefined ? options.volume : (voiceSettings.speechVolume !== undefined ? voiceSettings.speechVolume : 1.0)
 
     if (selectedVoice) {
       utterance.voice = selectedVoice
